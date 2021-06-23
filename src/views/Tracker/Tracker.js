@@ -1,70 +1,81 @@
 import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-//import InputLabel from "@material-ui/core/InputLabel";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-//import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
-//import CardHeader from "components/Card/CardHeader.js";
-import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
-//import CardFooter from "components/Card/CardFooter.js";
+import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
+//import moment from 'moment';
 
-import avatar from "assets/img/faces/marc.jpg";
+// const styles = {
+//   formTitle: {
+//     color: '#000',
+//     fontSize: '27px',
+//     fontWeight: '700',
+//     marginBottom: '8px',
+//   },
+//   formControl: {
+//     //margin: theme.spacing(1),
+//     minWidth: 120,
+//   },
+// };
 
-const styles = {
-  cardCategoryWhite: {
-    color: "rgba(255,255,255,.62)",
-    margin: "0",
-    fontSize: "14px",
-    marginTop: "0",
-    marginBottom: "0",
+const useStyles = makeStyles((styles) => ({
+  formTitle: {
+    color: '#000',
+    fontSize: '27px',
+    fontWeight: '700',
+    marginBottom: '8px',
   },
-  cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none",
+  formControl: {
+    margin: styles.spacing(1),
+    minWidth: 120,
   },
-};
-
-const useStyles = makeStyles(styles);
+  buttonSave: {
+    color: '#FFFFFF',
+    backgroundColor: '#1486DC',
+    width: '120px',
+  },
+  buttonReset: {
+    color: '#1A1A1A',
+    backgroundColor: '#ECEDF5',
+    width: '120px',
+  }
+}));
 
 export default function Tracker() {
   const classes = useStyles();
+  const [ticketNumber, setTicketNumber] = React.useState("");
   return (
     <div>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={8}>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card profile>
-            <CardAvatar profile>
-              <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                <img src={avatar} alt="..." />
-              </a>
-            </CardAvatar>
-            <CardBody profile>
-              <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>Alec Thompson</h4>
-              <p className={classes.description}>
-                Don{"'"}t be scared of the truth because we need to restart the
-                human foundation in truth And I love you like Kanye loves Kanye
-                I love Rick Owens’ bed design but the back is...
-              </p>
-              <Button color="primary" round>
-                Follow
-              </Button>
-            </CardBody>
-          </Card>
-        </GridItem>
-      </GridContainer>
+      <Card>
+        <CardBody style={{padding: "48px 64px 64px 64px"}}>
+          <div className={classes.formTitle}>Lacak Pengaduan</div>
+            <GridContainer>
+              <GridItem md={9}>
+                <FormControl fullWidth margin="normal" style={{margin: "25px 0px"}}>
+                  <TextField
+                    label="Nomor Tiket Pengaduan"
+                    id="outlined-size-small"
+                    placeholder="Nomor Tiket Pengaduan"
+                    variant="outlined"
+                    size="small"
+                    onChange={e => setTicketNumber(e.target.value)}
+                    value={ticketNumber}
+                    //error={partyName==""}
+                  />
+                </FormControl>
+              </GridItem>
+              <GridItem md={3} style={{alignSelf: "center", textAlign: "center"}}>
+                <Button className={classes.buttonSave}>Cari</Button>
+              </GridItem>
+            </GridContainer>
+        </CardBody>
+      </Card>
     </div>
   );
 }
