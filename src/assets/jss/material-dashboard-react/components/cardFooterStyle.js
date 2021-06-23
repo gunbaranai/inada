@@ -3,10 +3,10 @@ import { grayColor } from "assets/jss/material-dashboard-react.js";
 const cardFooterStyle = {
   cardFooter: {
     padding: "0",
-    paddingTop: "10px",
-    margin: "0 15px 10px",
+    //paddingTop: "10px",
+    margin: "0px 64px 64px 64px",
     borderRadius: "0",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
     display: "flex",
     backgroundColor: "transparent",

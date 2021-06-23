@@ -62,6 +62,10 @@ html * {
   -moz-osx-font-smoothing: grayscale;
 }
 body {
+  background-image: url('../img/bg.jpg');
+  background-position-y: center;
+  background-size: cover;
+
   background-color: #eeeeee;
   color: #3c4858;
   margin: 0;

@@ -2,7 +2,7 @@ import {
   defaultFont,
   container,
   primaryColor,
-  grayColor,
+  //grayColor,
 } from "assets/jss/material-dashboard-react.js";
 
 const footerStyle = {
@@ -30,8 +30,9 @@ const footerStyle = {
   },
   footer: {
     bottom: "0",
-    borderTop: "1px solid " + grayColor[11],
-    padding: "15px 0",
+    //borderTop: "1px solid " + grayColor[11],
+    padding: "0px 0",
+    backgroundColor: "#fff",
     ...defaultFont,
   },
   container,

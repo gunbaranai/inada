@@ -23,8 +23,9 @@ import { Provider } from "react-redux";
 import store from "./redux/store.js";
 
 // core components
-import Admin from "layouts/Admin.js";
-import RTL from "layouts/RTL.js";
+//import Admin from "layouts/Admin.js";
+//import RTL from "layouts/RTL.js";
+import Header from "layouts/Header.js";
 
 import "assets/css/material-dashboard-react.css?v=1.10.0";
 
@@ -32,9 +33,10 @@ ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <Switch>
-        <Route path="/admin" component={Admin} />
-        <Route path="/rtl" component={RTL} />
-        <Redirect from="/" to="/admin/dashboard" />
+        {/*<Route path="/admin" component={Admin} />
+        <Route path="/rtl" component={RTL} />*/}
+        <Route path="/" component={Header} />
+        <Redirect from="/" to="/report" />
       </Switch>
     </BrowserRouter>
   </Provider>,

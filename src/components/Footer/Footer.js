@@ -8,6 +8,10 @@ import List from "@material-ui/core/List";
 // core components
 import styles from "assets/jss/material-dashboard-react/components/footerStyle.js";
 
+import logo from "assets/img/logo_footer.png"
+import address from "assets/img/address.png"
+import contact from "assets/img/contact.png"
+
 const useStyles = makeStyles(styles);
 
 export default function Footer(props) {
@@ -16,7 +20,8 @@ export default function Footer(props) {
     <footer className={classes.footer}>
       <div className={classes.container}>
         <div className={classes.left}>
-          <List className={classes.list}>
+          <img src={logo} alt="logo" className={classes.img} />
+          {/*<List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
               <a href="#home" className={classes.block}>
                 Home
@@ -37,10 +42,12 @@ export default function Footer(props) {
                 Blog
               </a>
             </ListItem>
-          </List>
+          </List>*/}
         </div>
         <p className={classes.right}>
-          <span>
+          <img style={{marginRight: '25px'}} src={address} alt="address" className={classes.img} />
+          <img style={{marginRight: '25px'}} src={contact} alt="contact" className={classes.img} />
+          {/*<span>
             &copy; {1900 + new Date().getYear()}{" "}
             <a
               href="https://www.creative-tim.com?ref=mdr-footer"
@@ -50,7 +57,7 @@ export default function Footer(props) {
               Creative Tim
             </a>
             , made with love for a better web
-          </span>
+          </span>*/}
         </p>
       </div>
     </footer>
