@@ -13,6 +13,7 @@ import Menu from "@material-ui/icons/Menu";
 //import AdminNavbarLinks from "./AdminNavbarLinks.js";
 //import RTLNavbarLinks from "./RTLNavbarLinks.js";
 import Button from "components/CustomButtons/Button.js";
+import { Link } from "react-router-dom";
 
 //hooks
 import { useRouteName } from "hooks";
@@ -42,12 +43,16 @@ export default function Header(props) {
       <Toolbar className={classes.container}>
         <div style={{textAlign: 'center'}} className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
-          <Button style={routeName=='Report'?activeButtonStyle:inactiveButtonStyle} color="transparent" href="report" className={classes.title}>
+          <Link to="/report">
+          <Button style={routeName=='Report'?activeButtonStyle:inactiveButtonStyle} color="transparent" className={classes.title}>
             Ajukan Pengaduan
           </Button>
-          <Button style={routeName=='Tracker'?activeButtonStyle:inactiveButtonStyle}  color="transparent" href="track" className={classes.title}>
+          </Link>
+          <Link to="/track">
+          <Button style={routeName=='Tracker'?activeButtonStyle:inactiveButtonStyle}  color="transparent" className={classes.title}>
             Lacak Pengaduan
           </Button>
+          </Link>
         </div>
         <Hidden smDown implementation="css">
           {/*props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />*/}

@@ -17,7 +17,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import { Provider } from "react-redux";
 import store from "./redux/store.js";
@@ -31,14 +31,14 @@ import "assets/css/material-dashboard-react.css?v=1.10.0";
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <HashRouter>
       <Switch>
         {/*<Route path="/admin" component={Admin} />
         <Route path="/rtl" component={RTL} />*/}
         <Route path="/" component={Header} />
         <Redirect from="/" to="/report" />
       </Switch>
-    </BrowserRouter>
+    </HashRouter>
   </Provider>,
   document.getElementById("root")
 );
