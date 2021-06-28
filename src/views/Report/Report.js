@@ -253,7 +253,7 @@ export default function Report() {
             Mohon catat nomor tiket dibawah ini, untuk dapat melacak perkembangan kasus pengaduan.
           </div>
           <Button style={{fontSize: "36px"}}>
-            EGR3MOI0GGRD0V<img src={clipboardImage} />
+            EGR3MOI0GGRD0V<img style={{marginLeft: "16px"}} src={clipboardImage} />
           </Button>
         </DialogContent>
       </Dialog>
