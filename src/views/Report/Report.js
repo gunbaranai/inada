@@ -2,6 +2,9 @@ import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Button from "components/CustomButtons/Button.js";
@@ -13,7 +16,12 @@ import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+
+import { Add, Close } from '@material-ui/icons';
 //import moment from 'moment';
+
+import fileImage from "assets/img/file.png";
+import clipboardImage from "assets/img/clipboard.png";
 
 // const styles = {
 //   formTitle: {
@@ -62,6 +70,7 @@ export default function Report() {
   const [incidentDetail, setIncidentDetail] = React.useState("");
   const [partyName, setPartyName] = React.useState("");
   const [publish, setPublish] = React.useState("");
+  const [saved, save] = React.useState(false);
   return (
     <div>
       <Card>
@@ -205,7 +214,7 @@ export default function Report() {
             />
             <label htmlFor="raised-button-file">
               <Button variant="raised" component="span" className={classes.button}>
-                + Tambah Lampiran
+                <Add /> Tambah Lampiran
               </Button>
             </label>
           </FormControl>
@@ -226,10 +235,28 @@ export default function Report() {
           </FormControl>
         </CardBody>
         <CardFooter>
-          <Button className={classes.buttonSave}>Simpan</Button>
+          <Button className={classes.buttonSave} onClick={() => save(true)}>Simpan</Button>
           <Button className={classes.buttonReset}>Reset</Button>
         </CardFooter>
       </Card>
+
+      <Dialog open={saved} onClose={() => save(false)}>
+        <DialogTitle style={{textAlign: "right"}}>
+          <Close fontSize="large" style={{cursor: "pointer"}} onClick={() => save(false)} />
+        </DialogTitle>
+        <DialogContent style={{margin: "0px 64px 64px 64px", textAlign: "center"}}>
+          <img src={fileImage} />
+          <div style={{fontWeight: "700", fontSize: "28px", textAlign: "left"}}>
+            Pengaduan berhasil dibuat !
+          </div>
+          <div style={{fontWeight: "400", fontSize: "16px", textAlign: "justify", marginTop: "8px", marginBottom: "32px"}}>
+            Mohon catat nomor tiket dibawah ini, untuk dapat melacak perkembangan kasus pengaduan.
+          </div>
+          <Button style={{fontSize: "36px"}}>
+            EGR3MOI0GGRD0V<img src={clipboardImage} />
+          </Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
