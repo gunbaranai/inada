@@ -59,6 +59,7 @@ export default function Report() {
   const [reporterNumber, setReporterNumber] = React.useState("");
   const [reporterEmail, setReporterEmail] = React.useState("");
   const [incident, setIncident] = React.useState("");
+  const [incidentDetail, setIncidentDetail] = React.useState("");
   const [partyName, setPartyName] = React.useState("");
   const [publish, setPublish] = React.useState("");
   return (
@@ -147,9 +148,9 @@ export default function Report() {
               size="small"
               multiline
               rows={4}
-              onChange={e => setIncident(e.target.value)}
-              value={incident}
-              error={incident==""}
+              onChange={e => setIncidentDetail(e.target.value)}
+              value={incidentDetail}
+              error={incidentDetail==""}
             />
           </FormControl>
           <FormControl fullWidth margin="normal" style={{margin: "25px 0px"}}>
