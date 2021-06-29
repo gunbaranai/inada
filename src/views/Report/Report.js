@@ -16,12 +16,18 @@ import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import { Add, Close } from '@material-ui/icons';
 //import moment from 'moment';
 
 import fileImage from "assets/img/file.png";
 import clipboardImage from "assets/img/clipboard.png";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 // const styles = {
 //   formTitle: {
@@ -71,6 +77,13 @@ export default function Report() {
   const [partyName, setPartyName] = React.useState("");
   const [publish, setPublish] = React.useState("");
   const [saved, save] = React.useState(false);
+  const [copied, setCopied] = React.useState(false);
+
+  const handleCopyToClipboard = (ticketNumber) => {
+    setCopied(true)
+    navigator.clipboard.writeText(ticketNumber)
+  }
+
   return (
     <div>
       <Card>
@@ -252,11 +265,25 @@ export default function Report() {
           <div style={{fontWeight: "400", fontSize: "16px", textAlign: "justify", marginTop: "8px", marginBottom: "32px"}}>
             Mohon catat nomor tiket dibawah ini, untuk dapat melacak perkembangan kasus pengaduan.
           </div>
-          <Button style={{fontSize: "36px"}}>
+          <Button style={{fontSize: "36px"}} onClick={() => handleCopyToClipboard('EGR3MOI0GGRD0V')}>
             EGR3MOI0GGRD0V<img style={{marginLeft: "16px"}} src={clipboardImage} />
           </Button>
         </DialogContent>
       </Dialog>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        open={copied}
+        autoHideDuration={6000}
+        onClose={() => setCopied(false)}
+      >
+        <Alert onClose={() => setCopied(false)} severity="success">
+          Nomor tiket berhasil disalin!
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
