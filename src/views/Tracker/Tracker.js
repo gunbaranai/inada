@@ -1,6 +1,6 @@
 import React from "react";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -10,6 +10,10 @@ import CardBody from "components/Card/CardBody.js";
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import StepConnector from '@material-ui/core/StepConnector';
 import MuiAlert from '@material-ui/lab/Alert';
 //import moment from 'moment';
 
@@ -21,6 +25,26 @@ import img4 from "assets/img/sample_attachment/img-4.jpg"
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+
+const CustomConnector = withStyles({
+  active: {
+    '& $line': {
+      borderColor: '#1486DC',
+    },
+  },
+  completed: {
+    '& $line': {
+      borderColor: '#1486DC',
+    },
+  },
+  line: {
+    borderColor: '#1486DC',
+    borderWidth: 'medium',
+    marginLeft: '-2px',
+    marginTop: '6px',
+    //borderRadius: 1,
+  },
+})(StepConnector);
 
 const useStyles = makeStyles((styles) => ({
   formTitle: {
@@ -44,6 +68,11 @@ const useStyles = makeStyles((styles) => ({
     width: '120px',
   }
 }));
+
+const steps = [
+  {label: 'Pengaduan berhasil dibuat', timestamp: '15:39 14 Juni 2021'},
+  {label: 'Pengaduan sedang diproses', timestamp: '11:22 15 Juni 2021'},
+]
 
 export default function Tracker() {
   const classes = useStyles();
@@ -89,19 +118,19 @@ export default function Tracker() {
             </GridContainer>
             {showTicket?
               <div>
-                <hr />
-                <div style={{display: "flex", justifyContent: "space-between"}}>
-                  <div>
+                <hr style={{marginBottom: "32px"}} />
+                <div style={{marginBottom: "4px", display: "flex", justifyContent: "space-between"}}>
+                  <div style={{color: "#8B92A0", fontSize: "16px", fontWeight: "700"}}>
                     {ticketNumber}
                   </div>
-                  <div>
+                  <div style={{color: "#8B92A0", fontSize: "12px", fontWeight: "400"}}>
                     14 Juni 2021
                   </div>
                 </div>
-                <div>
+                <div style={{marginBottom: "12px", color: "#1A1A1A", fontSize: "20px", fontWeight: "600"}}>
                   Pungli dan premanisme
                 </div>
-                <div>
+                <div style={{marginBottom: "12px", color: "#1A1A1A", fontSize: "14px", fontWeight: "400"}}>
                   Aktivitas pungli di dalam ini yang menghambat.
                   Ketika tidak setoran, maka tidak mendapatkan pelayanan.
                   mengelompokan aksi pungli menjadi 2 klaster.
@@ -109,41 +138,62 @@ export default function Tracker() {
                   &quot;Kedua pungli di dalam kawasan peti kemas.
                   Pungli ini yang melibatkan karyawan perusahaan peti kemas
                 </div>
-                <GridContainer>
+                <GridContainer style={{color: "#1A1A1A", fontSize: "14px", fontWeight: "400"}}>
                   <GridItem md={3}>
-                    <div>Pihak yang bersangkutan
+                    <div>
+                      Pihak yang bersangkutan
                     </div>
-                    <div>Waktu kejadian perkara
+                    <div>
+                      Waktu kejadian perkara
                     </div>
-                    <div>Lokasi  kejadian perkara
+                    <div>
+                      Lokasi  kejadian perkara
                     </div>
                   </GridItem>
                   <GridItem md={9}>
-                    <div> : Petugas logistik crane
+                    <div>
+                      : Petugas logistik crane
                     </div>
-                    <div> : Setiap hari, biasanya di siang dan sore hari
+                    <div>
+                      : Setiap hari, biasanya di siang dan sore hari
                     </div>
-                    <div> : Logistik di Tanjung Priok
+                    <div>
+                      : Logistik di Tanjung Priok
                     </div>
                   </GridItem>
                 </GridContainer>
-                <GridContainer>
-                  <GridItem md={2}>
-                    <img src={img1} />
-                  </GridItem>
-                  <GridItem md={2}>
-                    <img src={img2} />
-                  </GridItem>
-                  <GridItem md={2}>
-                    <img src={img3} />
-                  </GridItem>
-                  <GridItem md={2}>
-                    <img src={img4} />
-                  </GridItem>
-                </GridContainer>
-                <div>
+                <div style={{marginTop: "16px"}}>
+                  <GridContainer>
+                    <GridItem md={2}>
+                      <img src={img1} />
+                    </GridItem>
+                    <GridItem md={2}>
+                      <img src={img2} />
+                    </GridItem>
+                    <GridItem md={2}>
+                      <img src={img3} />
+                    </GridItem>
+                    <GridItem md={2}>
+                      <img src={img4} />
+                    </GridItem>
+                  </GridContainer>
+                </div>
+                <div style={{marginTop: "24px", color: "#1A1A1A", fontSize: "20px", fontWeight: "600"}}>
                   Proses Pengaduan
                 </div>
+                <Stepper activeStep={steps.length} orientation="vertical" connector={<CustomConnector />}>
+                  {steps.map((step) => {
+                    console.log(step)
+                    return (
+                      <Step key={step.label}>
+                        <StepLabel>
+                          <div style={{color: "#1A1A1A", fontSize: "14px", fontWeight: "400"}}>{step.label}</div>
+                          <div style={{color: "#8B92A0", fontSize: "10px", fontWeight: "400"}}>{step.timestamp}</div>
+                        </StepLabel>
+                      </Step>
+                    )
+                  })}
+                </Stepper>
               </div>
             :null}
         </CardBody>

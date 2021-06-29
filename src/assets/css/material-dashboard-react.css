@@ -512,3 +512,7 @@ footer ul li a:hover {
 * {
   letter-spacing: normal !important;
 }
+
+.MuiStepIcon-root.MuiStepIcon-completed {
+    color: #1486DC;
+}
