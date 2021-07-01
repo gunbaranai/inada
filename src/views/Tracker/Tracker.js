@@ -123,12 +123,12 @@ function Tracker({...props}) {
                 <Button onClick={() => handleTrack(ticketNumber)} className={classes.buttonSave}>Cari</Button>
               </GridItem>
             </GridContainer>
-            {showTicket && props.ticketData.legnth != 0?
+            {showTicket && props.ticketData.length != 0?
               <div>
                 <hr style={{marginBottom: "32px"}} />
                 <div style={{marginBottom: "4px", display: "flex", justifyContent: "space-between"}}>
                   <div style={{color: "#8B92A0", fontSize: "16px", fontWeight: "700"}}>
-                    {props.ticketData.ticketNumber}
+                    {props.ticketData.report_code}
                   </div>
                   <div style={{color: "#8B92A0", fontSize: "12px", fontWeight: "400"}}>
                     14 Juni 2021
