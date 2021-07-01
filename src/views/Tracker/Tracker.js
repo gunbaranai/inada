@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 // @material-ui/core components
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 // core components
@@ -16,6 +17,8 @@ import StepLabel from '@material-ui/core/StepLabel';
 import StepConnector from '@material-ui/core/StepConnector';
 import MuiAlert from '@material-ui/lab/Alert';
 //import moment from 'moment';
+import { fetchTicket } from "../../redux/actions/aTicket";
+import { connect } from "react-redux";
 
 import img1 from "assets/img/sample_attachment/img-1.jpg"
 import img2 from "assets/img/sample_attachment/img-2.jpg"
@@ -72,16 +75,18 @@ const useStyles = makeStyles((styles) => ({
 const steps = [
   {label: 'Pengaduan berhasil dibuat', timestamp: '15:39 14 Juni 2021'},
   {label: 'Pengaduan sedang diproses', timestamp: '11:22 15 Juni 2021'},
+  {label: 'Pengaduan selesai diproses', timestamp: '13:33 19 Juni 20222'},
 ]
 
-export default function Tracker() {
+function Tracker({...props}) {
   const classes = useStyles();
   const [ticketNumber, setTicketNumber] = React.useState("");
   const [error, setError] = React.useState(false);
   const [showTicket, setShowTicket] = React.useState(false);
 
   const handleTrack = (ticketNumber) => {
-    if(ticketNumber == 'EGR3MOI0GGRD0V'){
+    if(ticketNumber != ""){
+      props.fetchTicket(ticketNumber)
       setShowTicket(true)
     } else {
       setError(true)
@@ -91,6 +96,8 @@ export default function Tracker() {
   const handleClose = () => {
     setError(false)
   }
+
+  console.log(props.ticketData)
 
   return (
     <div>
@@ -116,27 +123,22 @@ export default function Tracker() {
                 <Button onClick={() => handleTrack(ticketNumber)} className={classes.buttonSave}>Cari</Button>
               </GridItem>
             </GridContainer>
-            {showTicket?
+            {showTicket && props.ticketData.legnth != 0?
               <div>
                 <hr style={{marginBottom: "32px"}} />
                 <div style={{marginBottom: "4px", display: "flex", justifyContent: "space-between"}}>
                   <div style={{color: "#8B92A0", fontSize: "16px", fontWeight: "700"}}>
-                    {ticketNumber}
+                    {props.ticketData.ticketNumber}
                   </div>
                   <div style={{color: "#8B92A0", fontSize: "12px", fontWeight: "400"}}>
                     14 Juni 2021
                   </div>
                 </div>
                 <div style={{marginBottom: "12px", color: "#1A1A1A", fontSize: "20px", fontWeight: "600"}}>
-                  Pungli dan premanisme
+                  {props.ticketData[0].information}
                 </div>
                 <div style={{marginBottom: "12px", color: "#1A1A1A", fontSize: "14px", fontWeight: "400"}}>
-                  Aktivitas pungli di dalam ini yang menghambat.
-                  Ketika tidak setoran, maka tidak mendapatkan pelayanan.
-                  mengelompokan aksi pungli menjadi 2 klaster.
-                  Kelompok pertama berada di luar kawasan peti kemas dan para preman ini kerap mengutip Rp 2.000 hingga Rp 5.000 untuk setiap aktivitas logistik.
-                  &quot;Kedua pungli di dalam kawasan peti kemas.
-                  Pungli ini yang melibatkan karyawan perusahaan peti kemas
+                  {props.ticketData[0].detail}
                 </div>
                 <GridContainer style={{color: "#1A1A1A", fontSize: "14px", fontWeight: "400"}}>
                   <GridItem md={3}>
@@ -152,13 +154,13 @@ export default function Tracker() {
                   </GridItem>
                   <GridItem md={9}>
                     <div>
-                      : Petugas logistik crane
+                      : {props.ticketData[0].related_parties}
                     </div>
                     <div>
-                      : Setiap hari, biasanya di siang dan sore hari
+                      : {props.ticketData[0].time_occurrence}
                     </div>
                     <div>
-                      : Logistik di Tanjung Priok
+                      : {props.ticketData[0].location_detail}
                     </div>
                   </GridItem>
                 </GridContainer>
@@ -215,3 +217,20 @@ export default function Tracker() {
     </div>
   );
 }
+
+const ticketPropTypes = {
+  ticketData: PropTypes.array,
+  ticketProgress: PropTypes.bool,
+  fetchTicket: PropTypes.func,
+}
+
+Tracker.propTypes = ticketPropTypes
+
+const mapStateToProps = (state) => {
+  return {
+    ticketData: state.ticketStore.data,
+    ticketProgress: state.ticketStore.inProgress,
+  }
+}
+
+export default connect(mapStateToProps, {fetchTicket})(Tracker)

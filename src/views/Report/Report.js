@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
@@ -74,14 +75,100 @@ export default function Report() {
   const [reporterEmail, setReporterEmail] = React.useState("");
   const [incident, setIncident] = React.useState("");
   const [incidentDetail, setIncidentDetail] = React.useState("");
+  const [incidentTime, setIncidentTime] = React.useState("");
+  const [incidentLocation, setIncidentLocation] = React.useState("");
   const [partyName, setPartyName] = React.useState("");
   const [publish, setPublish] = React.useState("");
-  const [saved, save] = React.useState(false);
+  const [saved, save] = React.useState("");
+  //const [loaded, loading] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
+  const [formError, setFormError] = React.useState(false);
 
   const handleCopyToClipboard = (ticketNumber) => {
     setCopied(true)
     navigator.clipboard.writeText(ticketNumber)
+  }
+
+  const handleSave = () => {
+    if(confidentiality-1 < 0 || incident == '' || incidentDetail == '' || publish-1 < 0){
+      setFormError(true)
+    } else {
+      if(confidentiality-1 == 1){
+        if(reporterName == '' || (reporterEmail == '' && reporterNumber == '')){
+          setFormError(true)
+        } else {
+          handleAnonymous()
+        }
+      } else {
+        handleAnonymous()
+      }
+    }
+  }
+
+  const handleAnonymous = () => {
+    //loading(true)
+    console.log(
+      '{ type : ', confidentiality-1,
+      ', information : ', incident,
+      ', detail : ', incidentDetail,
+      ', related_parties : ', partyName,
+      ', time_occurence : ', incidentTime,
+      ', location_detail : ', incidentLocation,
+      ', is_published : ', publish-1,
+      ', informer : ', reporterName,
+      ', phone_no : ', reporterNumber,
+      ', email_address : ', reporterEmail,
+    )
+
+    axios({
+      method: "post",
+      url: "http://172.105.119.140:8086/api/report",
+      data: {
+        type: (confidentiality-1).toString(),
+        information: incident,
+        detail: incidentDetail,
+        related_parties: partyName,
+        time_occurence: incidentTime,
+        location_detail: incidentLocation,
+        is_published: (publish-1).toString(),
+        informer: reporterName,
+        phone_no: reporterNumber,
+        email_address: reporterEmail,
+      }
+    })
+    .then((response) => {
+      if(response.status == 200){
+        if(response.data.status == "success"){
+          //loading(false)
+          console.log(response.data.data[0].report_code)
+          save(response.data.data[0].report_code)
+        } else {
+          setFormError(true) // ganti message
+        }
+      } else {
+        setFormError(true) // ganti message
+      }
+    })
+    .catch(function(error){
+      //loading(false)
+      if(error.response){
+        if(error.response.status == 401 || error.response.status == 403 || error.response.status == 400){
+          setFormError(true) // ganti message nanti
+        } else if(error.response.status === 404 || error.response.status === 500){
+          setFormError(true) //"Server cannot be contacted! Please ask your system administrator!: Enum"
+        } else {
+          setFormError(true) //"Something went wrong... Please try again later..."
+        }
+      } else if(error.request){
+        setFormError(true) //"Request have no response! Please check on your internet connection and refresh this page."
+      } else {
+        setFormError(true) //"Something went wrong... Please try again later..."
+      }
+    })
+  }
+
+  const handleReset = () => {
+    setConfidentiality
   }
 
   return (
@@ -145,6 +232,9 @@ export default function Report() {
                   </FormControl>
                 </GridItem>
               </GridContainer>
+              <div style={{fontSize: "10px", marginTop: "-24px"}}>
+                Isi minimal salah satu informasi kontak (No.HP / E-mail) untuk mempermudah menindak lanjuti pengaduan yang disampaikan.
+              </div>
             </div>
           :
             null
@@ -204,6 +294,8 @@ export default function Report() {
               placeholder="Waktu kejadian perkara terjadi"
               variant="outlined"
               size="small"
+              onChange={e => setIncidentTime(e.target.value)}
+              value={incidentTime}
             />
           </FormControl>
           <FormControl fullWidth margin="normal" style={{margin: "25px 0px"}}>
@@ -213,6 +305,8 @@ export default function Report() {
               placeholder="Lokasi kejadian perkara terjadi"
               variant="outlined"
               size="small"
+              onChange={e => setIncidentLocation(e.target.value)}
+              value={incidentLocation}
             />
           </FormControl>
           <FormControl margin="normal" style={{margin: "25px 0px"}}>
@@ -242,20 +336,20 @@ export default function Report() {
               placeholder="Publikasi pengaduan yang anda buat ?"
               error={publish==""}
             >
-              <MenuItem value={1}>Ya, Publikasikan</MenuItem>
-              <MenuItem value={2}>Tidak, Jangan dipublikasikan</MenuItem>
+              <MenuItem value={2}>Ya, Publikasikan</MenuItem>
+              <MenuItem value={1}>Tidak, Jangan dipublikasikan</MenuItem>
             </Select>
           </FormControl>
         </CardBody>
         <CardFooter>
-          <Button className={classes.buttonSave} onClick={() => save(true)}>Simpan</Button>
-          <Button className={classes.buttonReset}>Reset</Button>
+          <Button className={classes.buttonSave} onClick={() => handleSave()}>Simpan</Button>
+          <Button className={classes.buttonReset} onClick={() => handleReset()}>Reset</Button>
         </CardFooter>
       </Card>
 
-      <Dialog open={saved} onClose={() => save(false)}>
+      <Dialog open={saved != ""} onClose={() => save("")}>
         <DialogTitle style={{textAlign: "right"}}>
-          <Close fontSize="large" style={{cursor: "pointer"}} onClick={() => save(false)} />
+          <Close fontSize="large" style={{cursor: "pointer"}} onClick={() => save("")} />
         </DialogTitle>
         <DialogContent style={{margin: "0px 64px 64px 64px", textAlign: "center"}}>
           <img src={fileImage} />
@@ -265,8 +359,8 @@ export default function Report() {
           <div style={{fontWeight: "400", fontSize: "16px", textAlign: "justify", marginTop: "8px", marginBottom: "32px"}}>
             Mohon catat nomor tiket dibawah ini, untuk dapat melacak perkembangan kasus pengaduan.
           </div>
-          <Button style={{fontSize: "36px"}} onClick={() => handleCopyToClipboard('EGR3MOI0GGRD0V')}>
-            EGR3MOI0GGRD0V<img style={{marginLeft: "16px"}} src={clipboardImage} />
+          <Button style={{fontSize: "36px"}} onClick={() => handleCopyToClipboard(saved)}>
+            {saved}<img style={{marginLeft: "16px"}} src={clipboardImage} />
           </Button>
         </DialogContent>
       </Dialog>
@@ -282,6 +376,20 @@ export default function Report() {
       >
         <Alert onClose={() => setCopied(false)} severity="success">
           Nomor tiket berhasil disalin!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        open={formError}
+        autoHideDuration={6000}
+        onClose={() => setFormError(false)}
+      >
+        <Alert onClose={() => setFormError(false)} severity="error">
+          Formulir tidak lengkap!
         </Alert>
       </Snackbar>
     </div>
