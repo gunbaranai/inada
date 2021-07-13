@@ -157,7 +157,7 @@ function Tracker({...props}) {
                       : {props.ticketData[0].related_parties}
                     </div>
                     <div>
-                      : {props.ticketData[0].time_occurrence}
+                      : {props.ticketData[0].time_occurence}
                     </div>
                     <div>
                       : {props.ticketData[0].location_detail}
