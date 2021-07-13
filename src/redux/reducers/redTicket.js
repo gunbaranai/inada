@@ -7,12 +7,12 @@ const defaultState = {
 export function fetchTicket(state = defaultState, action){
   switch(action.type){
     case FETCH_TICKET:
-      return Object({data: [], inProgress: true})
+      return Object({data: [], inProgress: true, isError: false})
     case RECEIVE_TICKET:
       console.log(action.payload)
-      return Object.assign({}, state, {data: action.payload, inProgress: false})
+      return Object.assign({}, state, {data: action.payload, inProgress: false, isError: false})
     case FAILED_TICKET:
-      return ({data: [], inProgress: false})
+      return ({data: [], inProgress: false, isError: true})
     default:
       return state
   }

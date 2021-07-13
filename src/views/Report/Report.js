@@ -78,6 +78,7 @@ export default function Report() {
   const [incidentTime, setIncidentTime] = React.useState("");
   const [incidentLocation, setIncidentLocation] = React.useState("");
   const [partyName, setPartyName] = React.useState("");
+  const [attachments, setAttachments] = React.useState([]);
   const [publish, setPublish] = React.useState("");
   const [saved, save] = React.useState("");
   //const [loaded, loading] = React.useState(false);
@@ -97,15 +98,25 @@ export default function Report() {
         if(reporterName == '' || (reporterEmail == '' && reporterNumber == '')){
           setFormError(true)
         } else {
-          handleAnonymous()
+          handleSend()
         }
       } else {
-        handleAnonymous()
+        handleSend()
       }
     }
   }
 
-  const handleAnonymous = () => {
+  const fileData = (files, id) => {
+    let data = new FormData()
+    for (let i = 0; i < files.length; i++) {
+      data.append('file', files[i])
+    }
+    data.append('report_id', id)
+    console.log(data)
+    return data
+  }
+
+  const handleSend = () => {
     //loading(true)
     console.log(
       '{ type : ', confidentiality-1,
@@ -118,6 +129,7 @@ export default function Report() {
       ', informer : ', reporterName,
       ', phone_no : ', reporterNumber,
       ', email_address : ', reporterEmail,
+      ', files : ', attachments,
     )
 
     axios({
@@ -140,8 +152,45 @@ export default function Report() {
       if(response.status == 200){
         if(response.data.status == "success"){
           //loading(false)
-          console.log(response.data.data[0].report_code)
-          save(response.data.data[0].report_code)
+          if(attachments.length > 0){
+            axios({
+              method: "post",
+              url: "http://172.105.119.140:8086/api/report/upload",
+              data: fileData(attachments, response.data.data[0].id),
+            })
+            .then((uploadResponse) => {
+              if(uploadResponse.status == 200){
+                if(uploadResponse.data.status == "success"){
+                  //loading(false)
+                  console.log(uploadResponse.data)
+                  save(response.data.data[0].report_code)
+                } else {
+                  setFormError(true) // ganti message
+                }
+              } else {
+                setFormError(true) // ganti message
+              }
+            })
+            .catch(function(uploadError){
+              //loading(false)
+              if(uploadError.response){
+                if(uploadError.response.status == 401 || uploadError.response.status == 403 || uploadError.response.status == 400){
+                  setFormError(true) // ganti message nanti
+                } else if(uploadError.response.status === 404 || uploadError.response.status === 500){
+                  setFormError(true) //"Server cannot be contacted! Please ask your system administrator!: Enum"
+                } else {
+                  setFormError(true) //"Something went wrong... Please try again later..."
+                }
+              } else if(uploadError.request){
+                setFormError(true) //"Request have no response! Please check on your internet connection and refresh this page."
+              } else {
+                setFormError(true) //"Something went wrong... Please try again later..."
+              }
+            })
+          } else {
+            console.log(response.data)
+            save(response.data.data[0].report_code)
+          }
         } else {
           setFormError(true) // ganti message
         }
@@ -211,6 +260,7 @@ export default function Report() {
                       label="No. Hp"
                       id="outlined-size-small"
                       placeholder="Nomor yang bisa dihubungi"
+                      type="number"
                       variant="outlined"
                       size="small"
                       onChange={e => setReporterNumber(e.target.value)}
@@ -312,12 +362,12 @@ export default function Report() {
           <FormControl margin="normal" style={{margin: "25px 0px"}}>
             <InputLabel id="demo-simple-select-outlined-label">Lampiran* </InputLabel>
             <input
-              accept="image/*"
               className={classes.input}
               style={{ display: 'none' }}
               id="raised-button-file"
               multiple
               type="file"
+              onChange={e => setAttachments(e.target.files)}
             />
             <label htmlFor="raised-button-file">
               <Button variant="raised" component="span" className={classes.button}>

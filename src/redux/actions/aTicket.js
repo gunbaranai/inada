@@ -16,10 +16,15 @@ export function fetchTicket(ticketNumber){
     .then((response) => {
       if(response.status == 200){
         if(response.data.status == "success"){
-          dispatch({
-            type: RECEIVE_TICKET,
-            payload: response.data.data,
-          })
+          if(response.data.data.length > 0){
+            dispatch({
+              type: RECEIVE_TICKET,
+              payload: response.data.data,
+            })
+          } else {
+            console.log(response)
+            dispatch({type: FAILED_TICKET})
+          }
         } else {
           console.log(response)
           dispatch({type: FAILED_TICKET})
@@ -33,5 +38,11 @@ export function fetchTicket(ticketNumber){
       console.log(error)
       dispatch({type: FAILED_TICKET})
     })
+  }
+}
+
+export const clearTicketError = () => {
+  return dispatch => {
+    dispatch({type: FETCH_TICKET})
   }
 }

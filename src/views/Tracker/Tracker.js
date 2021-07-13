@@ -17,13 +17,9 @@ import StepLabel from '@material-ui/core/StepLabel';
 import StepConnector from '@material-ui/core/StepConnector';
 import MuiAlert from '@material-ui/lab/Alert';
 //import moment from 'moment';
-import { fetchTicket } from "../../redux/actions/aTicket";
-import { connect } from "react-redux";
-
-import img1 from "assets/img/sample_attachment/img-1.jpg"
-import img2 from "assets/img/sample_attachment/img-2.jpg"
-import img3 from "assets/img/sample_attachment/img-3.jpg"
-import img4 from "assets/img/sample_attachment/img-4.jpg"
+import { fetchTicket, clearTicketError } from "../../redux/actions/aTicket";
+import { fetchAttachments } from "../../redux/actions/aAttachments";
+import { connect, useDispatch } from "react-redux";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -80,9 +76,11 @@ const steps = [
 
 function Tracker({...props}) {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [ticketNumber, setTicketNumber] = React.useState("");
   const [error, setError] = React.useState(false);
   const [showTicket, setShowTicket] = React.useState(false);
+  const [attachmentLoaded, setAttachmentLoaded] = React.useState(false);
 
   const handleTrack = (ticketNumber) => {
     if(ticketNumber != ""){
@@ -95,9 +93,16 @@ function Tracker({...props}) {
 
   const handleClose = () => {
     setError(false)
+    dispatch(clearTicketError())
   }
 
-  console.log(props.ticketData)
+  if(props.ticketData.length > 0 && props.attachmentData.length == 0 && attachmentLoaded == false){
+    console.log(props.attachmentData.length)
+    setAttachmentLoaded(true)
+    props.fetchAttachments(props.ticketData[0].id)
+  }
+
+  console.log(props.attachmentData)
 
   return (
     <div>
@@ -166,18 +171,11 @@ function Tracker({...props}) {
                 </GridContainer>
                 <div style={{marginTop: "16px"}}>
                   <GridContainer>
-                    <GridItem md={2}>
-                      <img src={img1} />
-                    </GridItem>
-                    <GridItem md={2}>
-                      <img src={img2} />
-                    </GridItem>
-                    <GridItem md={2}>
-                      <img src={img3} />
-                    </GridItem>
-                    <GridItem md={2}>
-                      <img src={img4} />
-                    </GridItem>
+                    {props.attachmentData.map((attachment) =>
+                      <GridItem md={2} key={attachment.id}>
+                        <img width='80px' src={'http://172.105.119.140/attachments/'+attachment.file_name} />
+                      </GridItem>
+                    )}
                   </GridContainer>
                 </div>
                 <div style={{marginTop: "24px", color: "#1A1A1A", fontSize: "20px", fontWeight: "600"}}>
@@ -211,6 +209,20 @@ function Tracker({...props}) {
         onClose={handleClose}
       >
         <Alert onClose={handleClose} severity="error">
+          Nomor tiket tidak boleh kosong!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        open={props.ticketError}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="error">
           Nomor tiket tidak ditemukan!
         </Alert>
       </Snackbar>
@@ -221,7 +233,12 @@ function Tracker({...props}) {
 const ticketPropTypes = {
   ticketData: PropTypes.array,
   ticketProgress: PropTypes.bool,
+  ticketError: PropTypes.bool,
   fetchTicket: PropTypes.func,
+
+  attachmentData: PropTypes.array,
+  attachmentProgress: PropTypes.bool,
+  fetchAttachments: PropTypes.func,
 }
 
 Tracker.propTypes = ticketPropTypes
@@ -230,7 +247,11 @@ const mapStateToProps = (state) => {
   return {
     ticketData: state.ticketStore.data,
     ticketProgress: state.ticketStore.inProgress,
+    ticketError: state.ticketStore.isError,
+
+    attachmentData: state.attachmentStore.data,
+    attachmentProgress: state.attachmentStore.inProgress,
   }
 }
 
-export default connect(mapStateToProps, {fetchTicket})(Tracker)
+export default connect(mapStateToProps, {fetchTicket, fetchAttachments})(Tracker)
