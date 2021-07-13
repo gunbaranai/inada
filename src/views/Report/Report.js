@@ -128,7 +128,7 @@ export default function Report() {
         information: incident,
         detail: incidentDetail,
         related_parties: partyName,
-        time_occurence: incidentTime,
+        time_occurrence: incidentTime,
         location_detail: incidentLocation,
         is_published: (publish-1).toString(),
         informer: reporterName,
