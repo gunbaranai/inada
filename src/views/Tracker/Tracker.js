@@ -16,7 +16,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepConnector from '@material-ui/core/StepConnector';
 import MuiAlert from '@material-ui/lab/Alert';
-//import moment from 'moment';
+import moment from 'moment';
 import { fetchTicket, clearTicketError } from "../../redux/actions/aTicket";
 import { fetchAttachments } from "../../redux/actions/aAttachments";
 import { connect, useDispatch } from "react-redux";
@@ -68,11 +68,11 @@ const useStyles = makeStyles((styles) => ({
   }
 }));
 
-const steps = [
-  {label: 'Pengaduan berhasil dibuat', timestamp: '15:39 14 Juni 2021'},
-  {label: 'Pengaduan sedang diproses', timestamp: '11:22 15 Juni 2021'},
-  {label: 'Pengaduan selesai diproses', timestamp: '13:33 19 Juni 20222'},
-]
+// const steps = [
+//   {label: 'Pengaduan berhasil dibuat', timestamp: '15:39 14 Juni 2021'},
+//   {label: 'Pengaduan sedang diproses', timestamp: '11:22 15 Juni 2021'},
+//   {label: 'Pengaduan selesai diproses', timestamp: '13:33 19 Juni 20222'},
+// ]
 
 function Tracker({...props}) {
   const classes = useStyles();
@@ -80,7 +80,7 @@ function Tracker({...props}) {
   const [ticketNumber, setTicketNumber] = React.useState("");
   const [error, setError] = React.useState(false);
   const [showTicket, setShowTicket] = React.useState(false);
-  const [attachmentLoaded, setAttachmentLoaded] = React.useState(false);
+  //const [attachmentLoaded, setAttachmentLoaded] = React.useState(false);
 
   const handleTrack = (ticketNumber) => {
     if(ticketNumber != ""){
@@ -96,11 +96,11 @@ function Tracker({...props}) {
     dispatch(clearTicketError())
   }
 
-  if(props.ticketData.length > 0 && props.attachmentData.length == 0 && attachmentLoaded == false){
-    console.log(props.attachmentData.length)
-    setAttachmentLoaded(true)
-    props.fetchAttachments(props.ticketData[0].id)
-  }
+  // if(props.ticketData.length > 0 && props.attachmentData.length == 0 && attachmentLoaded == false){
+  //   console.log(props.attachmentData.length)
+  //   setAttachmentLoaded(true)
+  //   props.fetchAttachments(props.ticketData[0].id)
+  // }
 
   console.log(props.attachmentData)
 
@@ -171,7 +171,7 @@ function Tracker({...props}) {
                 </GridContainer>
                 <div style={{marginTop: "16px"}}>
                   <GridContainer>
-                    {props.attachmentData.map((attachment) =>
+                    {props.ticketData[0].attachments.map((attachment) =>
                       <GridItem md={2} key={attachment.id}>
                         <img width='80px' src={'http://172.105.119.140/attachments/'+attachment.file_name} />
                       </GridItem>
@@ -181,14 +181,14 @@ function Tracker({...props}) {
                 <div style={{marginTop: "24px", color: "#1A1A1A", fontSize: "20px", fontWeight: "600"}}>
                   Proses Pengaduan
                 </div>
-                <Stepper activeStep={steps.length} orientation="vertical" connector={<CustomConnector />}>
-                  {steps.map((step) => {
+                <Stepper activeStep={props.ticketData[0].histories.length} orientation="vertical" connector={<CustomConnector />}>
+                  {props.ticketData[0].histories.map((step) => {
                     console.log(step)
                     return (
-                      <Step key={step.label}>
+                      <Step key={step.detail_information}>
                         <StepLabel>
-                          <div style={{color: "#1A1A1A", fontSize: "14px", fontWeight: "400"}}>{step.label}</div>
-                          <div style={{color: "#8B92A0", fontSize: "10px", fontWeight: "400"}}>{step.timestamp}</div>
+                          <div style={{color: "#1A1A1A", fontSize: "14px", fontWeight: "400"}}>{step.detail_information}</div>
+                          <div style={{color: "#8B92A0", fontSize: "10px", fontWeight: "400"}}>{moment(step.created_date).format('h:mm DD MMMM YYYY')}</div>
                         </StepLabel>
                       </Step>
                     )

@@ -11,7 +11,7 @@ export function fetchTicket(ticketNumber){
 
     axios({
       method: "GET",
-      url: "http://172.105.119.140:8086/api/report?report_code=" + ticketNumber,
+      url: "http://172.105.119.140:8086/api/report/all?report_code=" + ticketNumber,
     })
     .then((response) => {
       if(response.status == 200){
