@@ -19,7 +19,7 @@ const headerStyle = () => ({
     marginBottom: "0",
     position: "absolute",
     width: "100%",
-    paddingTop: "10px",
+    paddingTop: "0px",
     zIndex: "1029",
     color: grayColor[7],
     border: "0",
@@ -35,6 +35,7 @@ const headerStyle = () => ({
   },
   flex: {
     flex: 1,
+    textAlign: 'center',
   },
   title: {
     ...defaultFont,
