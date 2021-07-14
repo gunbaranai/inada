@@ -159,13 +159,13 @@ function Tracker({...props}) {
                   </GridItem>
                   <GridItem md={9}>
                     <div>
-                      : {props.ticketData[0].related_parties}
+                      :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.ticketData[0].related_parties}
                     </div>
                     <div>
-                      : {props.ticketData[0].time_occurrence}
+                      :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.ticketData[0].time_occurrence}
                     </div>
                     <div>
-                      : {props.ticketData[0].location_detail}
+                      :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.ticketData[0].location_detail}
                     </div>
                   </GridItem>
                 </GridContainer>
