@@ -17,6 +17,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import StepConnector from '@material-ui/core/StepConnector';
 import MuiAlert from '@material-ui/lab/Alert';
 import moment from 'moment';
+import 'moment/locale/id';
 import { fetchTicket, clearTicketError } from "../../redux/actions/aTicket";
 import { fetchAttachments } from "../../redux/actions/aAttachments";
 import { connect, useDispatch } from "react-redux";
@@ -133,10 +134,10 @@ function Tracker({...props}) {
                 <hr style={{marginBottom: "32px"}} />
                 <div style={{marginBottom: "4px", display: "flex", justifyContent: "space-between"}}>
                   <div style={{color: "#8B92A0", fontSize: "16px", fontWeight: "700"}}>
-                    {props.ticketData.report_code}
+                    {props.ticketData[0].report_code}
                   </div>
                   <div style={{color: "#8B92A0", fontSize: "12px", fontWeight: "400"}}>
-                    14 Juni 2021
+                    {moment(props.ticketData[0].created_date).format('DD MMMM YYYY')}
                   </div>
                 </div>
                 <div style={{marginBottom: "12px", color: "#1A1A1A", fontSize: "20px", fontWeight: "600"}}>
