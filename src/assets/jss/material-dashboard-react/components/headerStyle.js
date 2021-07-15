@@ -35,7 +35,9 @@ const headerStyle = () => ({
   },
   flex: {
     flex: 1,
-    textAlign: 'center',
+    textAlign: "center",
+    display: "flex",
+    flexDirection: "row",
   },
   title: {
     ...defaultFont,

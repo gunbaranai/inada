@@ -24,12 +24,16 @@ const appStyle = (theme) => ({
   },
   content: {
     marginTop: "70px",
-    padding: "30px 15px",
+    padding: "30px 0px",
     minHeight: "calc(100vh - 123px)",
     width: "50%",
     marginLeft: "25%",
   },
-  container,
+  container: {
+    ...container,
+    paddingLeft: "0px",
+    paddingRight: "0px",
+  },
   map: {
     marginTop: "70px",
   },

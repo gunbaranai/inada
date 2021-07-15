@@ -147,7 +147,7 @@ function Tracker({...props}) {
                   {props.ticketData[0].detail}
                 </div>
                 <GridContainer style={{color: "#1A1A1A", fontSize: "14px", fontWeight: "400"}}>
-                  <GridItem md={3}>
+                  <GridItem md={5}>
                     <div>
                       Pihak yang bersangkutan
                     </div>
@@ -158,7 +158,7 @@ function Tracker({...props}) {
                       Lokasi  kejadian perkara
                     </div>
                   </GridItem>
-                  <GridItem md={9}>
+                  <GridItem md={7}>
                     <div>
                       :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.ticketData[0].related_parties}
                     </div>

@@ -47,9 +47,9 @@ export default function Header(props) {
       <Toolbar className={classes.container}>
         <GridContainer style={{display: 'contents'}}>
           <GridItem md={4} style={{textAlign: 'left'}}>
-            <img src={title} />
+            <img src={title} height="64px" />
           </GridItem>
-          <GridItem md={4}>
+          <GridItem md={4} style={{maxWidth: 'fit-content'}}>
             <div className={classes.flex}>
               {/* Here we create navbar brand, based on route name */}
               <Link to="/report">
@@ -65,7 +65,7 @@ export default function Header(props) {
             </div>
           </GridItem>
           <GridItem md={4} style={{textAlign: 'right'}}>
-            <img src={logo} />
+            <img src={logo} height="96px" />
           </GridItem>
         </GridContainer>
         {/*<Hidden smDown implementation="css">
