@@ -38,6 +38,7 @@ const headerStyle = () => ({
     textAlign: "center",
     display: "flex",
     flexDirection: "row",
+    justifyContent: "center",
   },
   title: {
     ...defaultFont,

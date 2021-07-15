@@ -49,19 +49,23 @@ export default function Header(props) {
           <GridItem md={4} style={{textAlign: 'left'}}>
             <img src={title} height="64px" />
           </GridItem>
-          <GridItem md={4} style={{maxWidth: 'fit-content'}}>
+          <GridItem md={4}>
             <div className={classes.flex}>
               {/* Here we create navbar brand, based on route name */}
-              <Link to="/report">
-              <Button style={routeName=='Report'?activeButtonStyle:inactiveButtonStyle} color="transparent" className={classes.title}>
-                Ajukan Pengaduan
-              </Button>
-              </Link>
-              <Link to="/track">
-              <Button style={routeName=='Tracker'?activeButtonStyle:inactiveButtonStyle}  color="transparent" className={classes.title}>
-                Lacak Pengaduan
-              </Button>
-              </Link>
+              <div>
+                <Link to="/report">
+                  <Button style={routeName=='Report'?activeButtonStyle:inactiveButtonStyle} color="transparent" className={classes.title}>
+                    Ajukan Pengaduan
+                  </Button>
+                </Link>
+              </div>
+              <div>
+                <Link to="/track">
+                  <Button style={routeName=='Tracker'?activeButtonStyle:inactiveButtonStyle}  color="transparent" className={classes.title}>
+                    Lacak Pengaduan
+                  </Button>
+                </Link>
+              </div>
             </div>
           </GridItem>
           <GridItem md={4} style={{textAlign: 'right'}}>
