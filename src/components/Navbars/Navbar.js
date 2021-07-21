@@ -3,8 +3,15 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import MenuItem from "@material-ui/core/MenuItem";
+import MenuList from "@material-ui/core/MenuList";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import Grow from "@material-ui/core/Grow";
+import Paper from "@material-ui/core/Paper";
+import Poppers from "@material-ui/core/Popper";
+import Divider from "@material-ui/core/Divider";
 //import IconButton from "@material-ui/core/IconButton";
 //import Hidden from "@material-ui/core/Hidden";
 import GridItem from "components/Grid/GridItem.js";
@@ -42,6 +49,17 @@ export default function Header(props) {
   const appBarClasses = classNames({
     [" " + classes[color]]: color,
   });
+  const [openProfile, setOpenProfile] = React.useState(null);
+  const handleClickProfile = (event) => {
+    if (openProfile && openProfile.contains(event.target)) {
+      setOpenProfile(null);
+    } else {
+      setOpenProfile(event.currentTarget);
+    }
+  };
+  const handleCloseProfile = () => {
+    setOpenProfile(null);
+  };
   console.log(routeName)
   return (
     <AppBar className={classes.appBar + appBarClasses}>
@@ -71,11 +89,77 @@ export default function Header(props) {
           </GridItem>
           <GridItem md={4} style={{textAlign: 'right'}}>
             <div style={{display: 'flex', flexDirection: 'row', float: 'right'}}>
-              <Link to="/login">
-                <Button style={inactiveButtonStyle} color="transparent" className={classes.title}>
-                  Masuk/Daftar <ArrowDropDown />
-                </Button>
-              </Link>
+              {props.isAuthenticated?
+                <div>
+                  <Button
+                    style={inactiveButtonStyle}
+                    color="transparent"
+                    className={classes.title}
+                    onClick={handleClickProfile}
+                  >
+                    My Account <ArrowDropDown />
+                  </Button>
+                  <Poppers
+                    open={Boolean(openProfile)}
+                    anchorEl={openProfile}
+                    transition
+                    disablePortal
+                    placement="bottom-end"
+                    className={
+                      classNames({ [classes.popperClose]: !openProfile }) +
+                      " " +
+                      classes.popperNav
+                    }
+                  >
+                    {({ TransitionProps, placement }) => (
+                      <Grow
+                        {...TransitionProps}
+                        id="profile-menu-list-grow"
+                        style={{
+                          transformOrigin:
+                            placement === "bottom" ? "center top" : "center bottom",
+                        }}
+                      >
+                        <Paper>
+                          <ClickAwayListener onClickAway={handleCloseProfile}>
+                            <MenuList role="menu" style={{padding: '24px'}}>
+                              <MenuItem
+                                onClick={handleCloseProfile}
+                                className={classes.dropdownItem}
+                                disabled
+                              >
+                                Ubah Profil Pengguna
+                              </MenuItem>
+                              <Divider light style={{margin: '16px 0px'}} />
+                              <MenuItem
+                                onClick={handleCloseProfile}
+                                className={classes.dropdownItem}
+                              >
+                                Daftar Pengaduan
+                              </MenuItem>
+                              <Divider light style={{margin: '16px 0px'}} />
+                              <Link to="/logout">
+                                <MenuItem
+                                  onClick={handleCloseProfile}
+                                  className={classes.dropdownItem}
+                                >
+                                  Keluar
+                                </MenuItem>
+                              </Link>
+                            </MenuList>
+                          </ClickAwayListener>
+                        </Paper>
+                      </Grow>
+                    )}
+                  </Poppers>
+                </div>
+              :
+                <Link to="/login">
+                  <Button style={inactiveButtonStyle} color="transparent" className={classes.title}>
+                    Masuk/Daftar
+                  </Button>
+                </Link>
+              }
               <img src={logo} height="64px" />
             </div>
           </GridItem>
@@ -102,4 +186,5 @@ Header.propTypes = {
   rtlActive: PropTypes.bool,
   handleDrawerToggle: PropTypes.func,
   routes: PropTypes.arrayOf(PropTypes.object),
+  isAuthenticated: PropTypes.bool,
 };

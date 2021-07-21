@@ -141,7 +141,9 @@ function Login({...props}) {
 
   return (
     <div>
-    {props.isAuthenticated?<Redirect from="/" to="/report" />:
+    {props.isAuthenticated?
+      <Redirect from="/" to="/report" />
+    :
       <Card>
         <CardBody style={{padding: "48px 64px 64px 64px"}}>
           <div style={titleSelector}>

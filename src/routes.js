@@ -19,7 +19,9 @@
 import Dashboard from "@material-ui/icons/Dashboard";
 import Report from "views/Report/Report.js";
 import Tracker from "views/Tracker/Tracker.js";
+import MyCase from "views/MyCase/MyCase.js";
 import Login from "views/Login/Login.js";
+import Logout from "views/Logout/Logout.js";
 
 const dashboardRoutes = [
   {
@@ -41,6 +43,20 @@ const dashboardRoutes = [
     name: "Login",
     icon: Dashboard,
     component: Login,
+    layout: "/",
+  },
+  {
+    path: "my-case",
+    name: "My Case",
+    icon: Dashboard,
+    component: MyCase,
+    layout: "/",
+  },
+  {
+    path: "logout",
+    name: "Logout",
+    icon: Dashboard,
+    component: Logout,
     layout: "/",
   },
 ];
