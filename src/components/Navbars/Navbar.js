@@ -131,12 +131,14 @@ export default function Header(props) {
                                 Ubah Profil Pengguna
                               </MenuItem>
                               <Divider light style={{margin: '16px 0px'}} />
-                              <MenuItem
-                                onClick={handleCloseProfile}
-                                className={classes.dropdownItem}
-                              >
-                                Daftar Pengaduan
-                              </MenuItem>
+                              <Link to="/my-case">
+                                <MenuItem
+                                  onClick={handleCloseProfile}
+                                  className={classes.dropdownItem}
+                                >
+                                  Daftar Pengaduan
+                                </MenuItem>
+                              </Link>
                               <Divider light style={{margin: '16px 0px'}} />
                               <Link to="/logout">
                                 <MenuItem

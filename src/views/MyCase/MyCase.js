@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Redirect } from "react-router-dom";
 // @material-ui/core components
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 // core components
@@ -8,8 +9,6 @@ import GridContainer from "components/Grid/GridContainer.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -18,9 +17,15 @@ import StepConnector from '@material-ui/core/StepConnector';
 import MuiAlert from '@material-ui/lab/Alert';
 import moment from 'moment';
 import 'moment/locale/id';
+import { KeyboardBackspace } from '@material-ui/icons';
 import { fetchTicket, clearTicketError } from "../../redux/actions/aTicket";
+import { fetchLogin, checkAuth } from "../../redux/actions/aLogin";
 import { fetchAttachments } from "../../redux/actions/aAttachments";
 import { connect, useDispatch } from "react-redux";
+import red from "../../assets/img/red.svg";
+import yellow from "../../assets/img/yellow.svg";
+import green from "../../assets/img/green.svg";
+import blue from "../../assets/img/blue.svg";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -51,7 +56,7 @@ const useStyles = makeStyles((styles) => ({
     color: '#000',
     fontSize: '27px',
     fontWeight: '700',
-    marginBottom: '8px',
+    marginBottom: '24px',
   },
   formControl: {
     margin: styles.spacing(1),
@@ -78,127 +83,145 @@ const useStyles = makeStyles((styles) => ({
 function MyCase({...props}) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [ticketNumber, setTicketNumber] = React.useState("");
   const [error, setError] = React.useState(false);
-  const [showTicket, setShowTicket] = React.useState(false);
-  //const [attachmentLoaded, setAttachmentLoaded] = React.useState(false);
-
-  const handleTrack = (ticketNumber) => {
-    if(ticketNumber != ""){
-      props.fetchTicket(ticketNumber)
-      setShowTicket(true)
-    } else {
-      setError(true)
-    }
-  }
+  const [listLoaded, setListLoaded] = React.useState(false);
+  const [activeTicket, setActiveTicket] = React.useState(-1);
 
   const handleClose = () => {
     setError(false)
     dispatch(clearTicketError())
   }
 
-  // if(props.ticketData.length > 0 && props.attachmentData.length == 0 && attachmentLoaded == false){
-  //   console.log(props.attachmentData.length)
-  //   setAttachmentLoaded(true)
-  //   props.fetchAttachments(props.ticketData[0].id)
-  // }
+  const statusIcon = (status) => {
+    switch (status) {
+      case 1:
+        return yellow
+      case 2:
+        return red
+      case 3:
+        return blue
+      case 4:
+        return green
+      default:
+        return yellow
+    }
+  }
 
-  console.log(props.attachmentData)
+  if(props.ticketData.length == 0 && props.authData.length != 0 && listLoaded == false){
+    console.log(props.authData.token)
+    setListLoaded(true)
+    props.fetchTicket("", props.authData.token)
+  }
+
+  console.log(props.authData, props.ticketData)
 
   return (
     <div>
-      <Card>
-        <CardBody style={{padding: "48px 64px 64px 64px"}}>
-          <div className={classes.formTitle}>Lacak Pengaduan</div>
-            <GridContainer>
-              <GridItem md={9}>
-                <FormControl fullWidth margin="normal" style={{margin: "25px 0px"}}>
-                  <TextField
-                    label="Nomor Tiket Pengaduan"
-                    id="outlined-size-small"
-                    placeholder="Nomor Tiket Pengaduan"
-                    variant="outlined"
-                    size="small"
-                    onChange={e => setTicketNumber(e.target.value)}
-                    value={ticketNumber}
-                    //error={partyName==""}
-                  />
-                </FormControl>
-              </GridItem>
-              <GridItem md={3} style={{alignSelf: "center", textAlign: "center"}}>
-                <Button onClick={() => handleTrack(ticketNumber)} className={classes.buttonSave}>Cari</Button>
-              </GridItem>
-            </GridContainer>
-            {showTicket && props.ticketData.length != 0?
-              <div>
-                <hr style={{marginBottom: "32px"}} />
-                <div style={{marginBottom: "4px", display: "flex", justifyContent: "space-between"}}>
-                  <div style={{color: "#8B92A0", fontSize: "16px", fontWeight: "700"}}>
-                    {props.ticketData[0].report_code}
+      {props.isAuthenticated?
+        <Card>
+          <CardBody style={{padding: "48px 64px 64px 64px"}}>
+              {activeTicket >= 0 && props.ticketData.length != 0?
+                <div>
+                  <KeyboardBackspace style={{marginBottom: '24px', cursor: 'pointer'}} onClick={() => setActiveTicket(-1)} />
+                  <div style={{marginBottom: "4px", display: "flex", justifyContent: "space-between"}}>
+                    <div style={{color: "#8B92A0", fontSize: "16px", fontWeight: "700"}}>
+                      {props.ticketData.filter(x => x.id == activeTicket)[0].report_code}
+                    </div>
+                    <div style={{color: "#8B92A0", fontSize: "12px", fontWeight: "400"}}>
+                      {moment(props.ticketData.filter(x => x.id == activeTicket)[0].created_date).format('DD MMMM YYYY')}
+                    </div>
                   </div>
-                  <div style={{color: "#8B92A0", fontSize: "12px", fontWeight: "400"}}>
-                    {moment(props.ticketData[0].created_date).format('DD MMMM YYYY')}
+                  <div style={{marginBottom: "12px", color: "#1A1A1A", fontSize: "20px", fontWeight: "600"}}>
+                    {props.ticketData.filter(x => x.id == activeTicket)[0].information}
                   </div>
-                </div>
-                <div style={{marginBottom: "12px", color: "#1A1A1A", fontSize: "20px", fontWeight: "600"}}>
-                  {props.ticketData[0].information}
-                </div>
-                <div style={{marginBottom: "12px", color: "#1A1A1A", fontSize: "14px", fontWeight: "400"}}>
-                  {props.ticketData[0].detail}
-                </div>
-                <GridContainer style={{color: "#1A1A1A", fontSize: "14px", fontWeight: "400"}}>
-                  <GridItem md={5}>
-                    <div>
-                      Pihak yang bersangkutan
-                    </div>
-                    <div>
-                      Waktu kejadian perkara
-                    </div>
-                    <div>
-                      Lokasi  kejadian perkara
-                    </div>
-                  </GridItem>
-                  <GridItem md={7}>
-                    <div>
-                      :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.ticketData[0].related_parties}
-                    </div>
-                    <div>
-                      :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.ticketData[0].time_occurrence}
-                    </div>
-                    <div>
-                      :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.ticketData[0].location_detail}
-                    </div>
-                  </GridItem>
-                </GridContainer>
-                <div style={{marginTop: "16px"}}>
-                  <GridContainer>
-                    {props.ticketData[0].attachments.map((attachment) =>
-                      <GridItem md={2} key={attachment.id}>
-                        <img width='80px' src={'http://172.105.119.140/attachments/'+attachment.file_name} />
-                      </GridItem>
-                    )}
+                  <div style={{marginBottom: "12px", color: "#1A1A1A", fontSize: "14px", fontWeight: "400"}}>
+                    {props.ticketData.filter(x => x.id == activeTicket)[0].detail}
+                  </div>
+                  <GridContainer style={{color: "#1A1A1A", fontSize: "14px", fontWeight: "400"}}>
+                    <GridItem md={5}>
+                      <div>
+                        Pihak yang bersangkutan
+                      </div>
+                      <div>
+                        Waktu kejadian perkara
+                      </div>
+                      <div>
+                        Lokasi  kejadian perkara
+                      </div>
+                    </GridItem>
+                    <GridItem md={7}>
+                      <div>
+                        :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.ticketData.filter(x => x.id == activeTicket)[0].related_parties}
+                      </div>
+                      <div>
+                        :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.ticketData.filter(x => x.id == activeTicket)[0].time_occurrence}
+                      </div>
+                      <div>
+                        :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.ticketData.filter(x => x.id == activeTicket)[0].location_detail}
+                      </div>
+                    </GridItem>
                   </GridContainer>
+                  <div style={{marginTop: "16px"}}>
+                    <GridContainer>
+                      {props.ticketData.filter(x => x.id == activeTicket)[0].attachments.map((attachment) =>
+                        <GridItem md={2} key={attachment.id}>
+                          <img width='80px' src={'http://172.105.119.140/attachments/'+attachment.file_name} />
+                        </GridItem>
+                      )}
+                    </GridContainer>
+                  </div>
+                  <div style={{marginTop: "24px", color: "#1A1A1A", fontSize: "20px", fontWeight: "600"}}>
+                    Proses Pengaduan
+                  </div>
+                  <Stepper activeStep={props.ticketData.filter(x => x.id == activeTicket)[0].histories.length} orientation="vertical" connector={<CustomConnector />}>
+                    {props.ticketData.filter(x => x.id == activeTicket)[0].histories.map((step) => {
+                      console.log(step)
+                      return (
+                        <Step key={step.detail_information}>
+                          <StepLabel>
+                            <div style={{color: "#1A1A1A", fontSize: "14px", fontWeight: "400"}}>{step.detail_information}</div>
+                            <div style={{color: "#8B92A0", fontSize: "10px", fontWeight: "400"}}>{moment(step.created_date).format('h:mm DD MMMM YYYY')}</div>
+                          </StepLabel>
+                        </Step>
+                      )
+                    })}
+                  </Stepper>
                 </div>
-                <div style={{marginTop: "24px", color: "#1A1A1A", fontSize: "20px", fontWeight: "600"}}>
-                  Proses Pengaduan
+              :
+                <div>
+                  <div className={classes.formTitle}>Daftar Pengaduan</div>
+                  {props.ticketData.map((ticket) =>
+                    <Button
+                      key={ticket.id}
+                      style={{width: '100%', justifyContent: 'space-around', padding: '8px 16px', fontSize: '14px', border: '0.5px solid #C4CDE0', background: '#FFFFFF'}}
+                      onClick={() => setActiveTicket(ticket.id)}
+                    >
+                      <GridContainer style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
+                        <GridItem sm={1}>
+                          <img style={{verticalAlign: 'middle'}} src={statusIcon(ticket.status)}/>
+                        </GridItem>
+                        <GridItem sm={3} style={{color: '#1A1A1A', textAlign: 'left', alignSelf: 'center'}}>
+                          {ticket.report_code}
+                        </GridItem>
+                        <GridItem sm={3} style={{color: '#1A1A1A', textAlign: 'left', alignSelf: 'center'}}>
+                          {ticket.information}
+                        </GridItem>
+                        <GridItem sm={3} style={{color: '#A5AEC2', textAlign: 'left', alignSelf: 'center'}}>
+                          {ticket.detail}
+                        </GridItem>
+                        <GridItem sm={2} style={{color: '#A5AEC2', textAlign: 'right', alignSelf: 'center'}}>
+                          {moment(ticket.created_date).format("DD MMMM YYYY")}
+                        </GridItem>
+                      </GridContainer>
+                    </Button>
+                  )}
                 </div>
-                <Stepper activeStep={props.ticketData[0].histories.length} orientation="vertical" connector={<CustomConnector />}>
-                  {props.ticketData[0].histories.map((step) => {
-                    console.log(step)
-                    return (
-                      <Step key={step.detail_information}>
-                        <StepLabel>
-                          <div style={{color: "#1A1A1A", fontSize: "14px", fontWeight: "400"}}>{step.detail_information}</div>
-                          <div style={{color: "#8B92A0", fontSize: "10px", fontWeight: "400"}}>{moment(step.created_date).format('h:mm DD MMMM YYYY')}</div>
-                        </StepLabel>
-                      </Step>
-                    )
-                  })}
-                </Stepper>
-              </div>
-            :null}
-        </CardBody>
-      </Card>
+              }
+          </CardBody>
+        </Card>
+      :
+        <Redirect from="/" to="/login" />
+      }
 
       <Snackbar
         anchorOrigin={{
@@ -240,6 +263,11 @@ const ticketPropTypes = {
   attachmentData: PropTypes.array,
   attachmentProgress: PropTypes.bool,
   fetchAttachments: PropTypes.func,
+
+  authData: PropTypes.object,
+  isAuthenticated: PropTypes.bool,
+  fetchLogin: PropTypes.func,
+  checkAuth: PropTypes.func,
 }
 
 MyCase.propTypes = ticketPropTypes
@@ -252,7 +280,10 @@ const mapStateToProps = (state) => {
 
     attachmentData: state.attachmentStore.data,
     attachmentProgress: state.attachmentStore.inProgress,
+
+    isAuthenticated: state.authStore.isAuthenticated,
+    authData: state.authStore.authData,
   }
 }
 
-export default connect(mapStateToProps, {fetchTicket, fetchAttachments})(MyCase)
+export default connect(mapStateToProps, {fetchTicket, fetchAttachments, fetchLogin, checkAuth})(MyCase)
