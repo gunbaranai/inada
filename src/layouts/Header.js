@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -10,6 +11,8 @@ import Navbar from "components/Navbars/Navbar.js";
 import Footer from "components/Footer/Footer.js";
 //import Sidebar from "components/Sidebar/Sidebar.js";
 
+import { checkAuth } from "../redux/actions/aLogin";
+import { connect } from "react-redux";
 import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-react/layouts/headerStyle.js";
@@ -38,7 +41,7 @@ const switchRoutes = (
 
 const useStyles = makeStyles(styles);
 
-export default function Header({ ...rest }) {
+function Header({ ...props }) {
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
@@ -50,11 +53,15 @@ export default function Header({ ...rest }) {
     setMobileOpen(!mobileOpen);
   };
   const getRoute = () => {
-    return window.location.pathname !== "/admin/maps";
+    return props.history.location.pathname !== "/login";
   };
   const resizeFunction = () => {
+
+      console.log(window.innerWidth)
     if (window.innerWidth >= 960) {
       setMobileOpen(false);
+    } else {
+      setMobileOpen(true)
     }
   };
   // initialize and destroy the PerfectScrollbar plugin
@@ -75,6 +82,8 @@ export default function Header({ ...rest }) {
       window.removeEventListener("resize", resizeFunction);
     };
   }, [mainPanel]);
+
+
   return (
     <div className={classes.wrapper}>
       {/*<Sidebar
@@ -91,18 +100,38 @@ export default function Header({ ...rest }) {
         <Navbar
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
-          {...rest}
+          isAuthenticated={props.isAuthenticated}
+          {...props}
         />
         {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
         {getRoute() ? (
-          <div className={classes.content}>
+          <div className={mobileOpen?classes.mobileContent:classes.content}>
             <div className={classes.container}>{switchRoutes}</div>
           </div>
         ) : (
-          <div className={classes.map}>{switchRoutes}</div>
+          <div className={mobileOpen?classes.mobileContent:classes.loginContent}>
+            <div className={classes.container}>{switchRoutes}</div>
+          </div>
         )}
         {getRoute() ? <Footer /> : null}
       </div>
     </div>
   );
 }
+
+const headerPropTypes = {
+  isAuthenticated: PropTypes.bool,
+  history: PropTypes.object,
+}
+
+Header.propTypes = headerPropTypes
+
+function mapStateToProps(state) {
+    return {
+      authData: state.authStore.authData,
+      inProgress: state.authStore.inProgress,
+      isAuthenticated: state.authStore.isAuthenticated,
+    };
+  }
+
+export default connect(mapStateToProps, {checkAuth})(Header)

@@ -11,6 +11,7 @@ import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 // @material-ui/icons
 //import Menu from "@material-ui/icons/Menu";
+import { ArrowDropDown } from '@material-ui/icons';
 // core components
 //import AdminNavbarLinks from "./AdminNavbarLinks.js";
 //import RTLNavbarLinks from "./RTLNavbarLinks.js";
@@ -69,7 +70,14 @@ export default function Header(props) {
             </div>
           </GridItem>
           <GridItem md={4} style={{textAlign: 'right'}}>
-            <img src={logo} height="96px" />
+            <div style={{display: 'flex', flexDirection: 'row', float: 'right'}}>
+              <Link to="/login">
+                <Button style={inactiveButtonStyle} color="transparent" className={classes.title}>
+                  Masuk/Daftar <ArrowDropDown />
+                </Button>
+              </Link>
+              <img src={logo} height="64px" />
+            </div>
           </GridItem>
         </GridContainer>
         {/*<Hidden smDown implementation="css">

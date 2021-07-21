@@ -29,6 +29,20 @@ const appStyle = (theme) => ({
     width: "50%",
     marginLeft: "25%",
   },
+  loginContent: {
+    marginTop: "70px",
+    padding: "30px 0px",
+    minHeight: "calc(100vh - 123px)",
+    width: "40%",
+    marginLeft: "30%",
+  },
+  mobileContent: {
+    marginTop: "30px",
+    padding: "30px 0px",
+    minHeight: "calc(100vh - 123px)",
+    width: "100%",
+    marginLeft: "0",
+  },
   container: {
     ...container,
     paddingLeft: "0px",

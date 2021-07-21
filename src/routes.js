@@ -19,6 +19,7 @@
 import Dashboard from "@material-ui/icons/Dashboard";
 import Report from "views/Report/Report.js";
 import Tracker from "views/Tracker/Tracker.js";
+import Login from "views/Login/Login.js";
 
 const dashboardRoutes = [
   {
@@ -33,6 +34,13 @@ const dashboardRoutes = [
     name: "Tracker",
     icon: Dashboard,
     component: Tracker,
+    layout: "/",
+  },
+  {
+    path: "login",
+    name: "Login",
+    icon: Dashboard,
+    component: Login,
     layout: "/",
   },
 ];
