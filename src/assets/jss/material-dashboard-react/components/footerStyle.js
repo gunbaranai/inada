@@ -37,6 +37,7 @@ const footerStyle = {
     padding: 0,
     display: "grid",
     height: "100%",
+    backgroundColor: "#1A1A1A",
     ...defaultFont,
   },
   container,

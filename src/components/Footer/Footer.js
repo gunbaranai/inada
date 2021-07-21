@@ -5,13 +5,15 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import ListItem from "@material-ui/core/ListItem";
 import List from "@material-ui/core/List";
+import Hidden from '@material-ui/core/Hidden';
 // core components
 import styles from "assets/jss/material-dashboard-react/components/footerStyle.js";
 
 // import logo from "assets/img/logo_footer.png"
 // import address from "assets/img/address.png"
 // import contact from "assets/img/contact.png"
-import wholeFooter from "assets/img/footer.png"
+import footerXl from "assets/img/footer_xl.png"
+import footerLg from "assets/img/footer_lg.png"
 
 const useStyles = makeStyles(styles);
 
@@ -19,49 +21,15 @@ export default function Footer(props) {
   const classes = useStyles();
   return (
     <footer className={classes.footer}>
-      <img style={{maxWidth: '100%', maxHeight: '100vh', margin: 'auto'}} src={wholeFooter} />
-      {/*<div className={classes.container}>
-        <div className={classes.left}>
-          <img src={logo} alt="logo" className={classes.img} />
-          <List className={classes.list}>
-            <ListItem className={classes.inlineBlock}>
-              <a href="#home" className={classes.block}>
-                Home
-              </a>
-            </ListItem>
-            <ListItem className={classes.inlineBlock}>
-              <a href="#company" className={classes.block}>
-                Company
-              </a>
-            </ListItem>
-            <ListItem className={classes.inlineBlock}>
-              <a href="#portfolio" className={classes.block}>
-                Portfolio
-              </a>
-            </ListItem>
-            <ListItem className={classes.inlineBlock}>
-              <a href="#blog" className={classes.block}>
-                Blog
-              </a>
-            </ListItem>
-          </List>*/}
-        {/*</div>
-        <p className={classes.right}>
-          <img style={{marginRight: '25px'}} src={address} alt="address" className={classes.img} />
-          <img style={{marginRight: '25px'}} src={contact} alt="contact" className={classes.img} />
-          <span>
-            &copy; {1900 + new Date().getYear()}{" "}
-            <a
-              href="https://www.creative-tim.com?ref=mdr-footer"
-              target="_blank"
-              className={classes.a}
-            >
-              Creative Tim
-            </a>
-            , made with love for a better web
-          </span>
-        </p>
-      </div>*/}
+      <Hidden only={['xs', 'sm', 'md', 'lg']}>
+        <img style={{maxWidth: '1280px', margin: 'auto', marginBottom: '0'}} src={footerXl} />
+      </Hidden>
+      <Hidden only={['xs', 'sm', 'md', 'xl']}>
+        <img style={{maxWidth: '1280px', margin: 'auto', marginBottom: '0'}} src={footerLg} />
+      </Hidden>
+      <Hidden only={['xs', 'sm', 'lg', 'xl']}>
+        <img style={{maxWidth: '960px', margin: 'auto', marginBottom: '0'}} src={footerLg} />
+      </Hidden>
     </footer>
   );
 }
