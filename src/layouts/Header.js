@@ -47,7 +47,7 @@ function Header({ ...props }) {
   // ref to help us initialize PerfectScrollbar on windows devices
   const mainPanel = React.createRef();
   // states and functions
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(window.innerWidth < 960);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

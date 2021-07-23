@@ -37,6 +37,15 @@ const headerStyle = () => ({
     width: "calc(100% - 30px)",
     padding: "15px",
   },
+  mobileContainer: {
+    ...container,
+    minHeight: "50px",
+    backgroundColor: "#1A1A1A",
+    position: "fixed",
+    width: "calc(100% - 30px)",
+    padding: "15px",
+    justifyContent: "space-between",
+  },
   flex: {
     flex: 1,
     textAlign: "center",

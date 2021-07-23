@@ -17,8 +17,7 @@ import Divider from "@material-ui/core/Divider";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 // @material-ui/icons
-//import Menu from "@material-ui/icons/Menu";
-import { ArrowDropDown } from '@material-ui/icons';
+import { ArrowDropDown, Menu } from '@material-ui/icons';
 // core components
 //import AdminNavbarLinks from "./AdminNavbarLinks.js";
 //import RTLNavbarLinks from "./RTLNavbarLinks.js";
@@ -50,6 +49,7 @@ export default function Header(props) {
     [" " + classes[color]]: color,
   });
   const [openProfile, setOpenProfile] = React.useState(null);
+  const [openMenu, setOpenMenu] = React.useState(null);
   const handleClickProfile = (event) => {
     if (openProfile && openProfile.contains(event.target)) {
       setOpenProfile(null);
@@ -60,11 +60,22 @@ export default function Header(props) {
   const handleCloseProfile = () => {
     setOpenProfile(null);
   };
+  const handleClickMenu = (event) => {
+    if (openMenu && openMenu.contains(event.target)) {
+      setOpenMenu(null);
+    } else {
+      setOpenMenu(event.currentTarget);
+    }
+  };
+  const handleCloseMenu = () => {
+    setOpenMenu(null);
+  };
   console.log(routeName)
   return (
     <AppBar className={classes.appBar + appBarClasses}>
-      <Toolbar className={classes.container}>
-        <GridContainer style={{display: 'contents'}}>
+      <Toolbar className={window.innerWidth >= 960?classes.container:classes.mobileContainer}>
+        {window.innerWidth >= 960?
+          <GridContainer style={{display: 'contents'}}>
           <GridItem md={4} style={{textAlign: 'left'}}>
             <img src={title} height="64px" />
           </GridItem>
@@ -165,19 +176,88 @@ export default function Header(props) {
               <img src={logo} height="64px" />
             </div>
           </GridItem>
-        </GridContainer>
-        {/*<Hidden smDown implementation="css">
-          {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
-        </Hidden>
-        <Hidden mdUp implementation="css">
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={props.handleDrawerToggle}
-          >
-            <Menu />
-          </IconButton>
-        </Hidden>*/}
+          </GridContainer>
+        :
+          <GridContainer style={{display: 'contents'}}>
+            <GridItem md={9} style={{textAlign: 'left'}}>
+              <img src={title} height="64px" />
+            </GridItem>
+            <GridItem md={3} style={{textAlign: 'right'}}>
+              <Menu style={{fontSize: '64px', color: '#fff', cursor: 'pointer'}} onClick={handleClickMenu}/>
+              <Poppers
+                open={Boolean(openMenu)}
+                anchorEl={openMenu}
+                transition
+                disablePortal
+                placement="bottom-end"
+                className={
+                  classNames({ [classes.popperClose]: !openMenu }) +
+                  " " +
+                  classes.popperNav
+                }
+              >
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    id="profile-menu-list-grow"
+                    style={{
+                      transformOrigin:
+                        placement === "bottom" ? "center top" : "center bottom",
+                    }}
+                  >
+                    <Paper>
+                      <ClickAwayListener onClickAway={handleCloseMenu}>
+                        <MenuList role="menu" style={{padding: '24px'}}>
+                          <Link to="/report">
+                            <MenuItem
+                              onClick={handleCloseMenu}
+                              className={classes.dropdownItem}
+                            >
+                              Buat Pengaduan
+                            </MenuItem>
+                          </Link>
+                          <Link to="/track">
+                            <MenuItem
+                              onClick={handleCloseMenu}
+                              className={classes.dropdownItem}
+                            >
+                              Lacak Pengaduan
+                            </MenuItem>
+                          </Link>
+                          <Divider light style={{margin: '16px 0px'}} />
+                          <MenuItem
+                            onClick={handleCloseMenu}
+                            className={classes.dropdownItem}
+                            disabled
+                          >
+                            Ubah Profil Pengguna
+                          </MenuItem>
+                          <Link to="/my-case">
+                            <MenuItem
+                              onClick={handleCloseMenu}
+                              className={classes.dropdownItem}
+                            >
+                              Daftar Pengaduan
+                            </MenuItem>
+                          </Link>
+                          <Divider light style={{margin: '16px 0px'}} />
+                          <Link to="/logout">
+                            <MenuItem
+                              onClick={handleCloseMenu}
+                              className={classes.dropdownItem}
+                            >
+                              Keluar
+                            </MenuItem>
+                          </Link>
+                        </MenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Poppers>
+            </GridItem>
+          </GridContainer>
+        }
       </Toolbar>
     </AppBar>
   );
