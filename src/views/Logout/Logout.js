@@ -25,6 +25,9 @@ function Logout({...props}) {
     sessionStorage.clear()
     props.clearAuth()
     cookie.remove("token")
+    cookie.remove("name")
+    cookie.remove("email")
+    cookie.remove("phone")
     props.history.push("/login")
   }
 
