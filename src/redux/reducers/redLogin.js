@@ -1,4 +1,5 @@
 import { FETCH_LOGIN, FAILED_LOGIN, RECEIVE_LOGIN, FETCH_LOGOUT, RECEIVE_LOGOUT, FETCH_CHECK_AUTH, RECEIVE_CHECK_AUTH } from '../actions/aLogin';
+import cookie from "react-cookies"
 
 const defaultAuthState = {
     authData: [],
@@ -16,6 +17,7 @@ export function fetchAuth(state = defaultAuthState, action) {
             });
         case RECEIVE_LOGIN:
             newAuthState = action.payload;
+            cookie.save("token", action.payload.token, {path: "/"})
             return Object.assign(
                 {},
                 state,

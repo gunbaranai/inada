@@ -26,6 +26,7 @@ import red from "../../assets/img/red.svg";
 import yellow from "../../assets/img/yellow.svg";
 import green from "../../assets/img/green.svg";
 import blue from "../../assets/img/blue.svg";
+import cookie from "react-cookies"
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -107,17 +108,17 @@ function MyCase({...props}) {
     }
   }
 
-  if(props.ticketData.length == 0 && props.authData.length != 0 && listLoaded == false){
-    console.log(props.authData.token)
+  if(cookie.load("token") && listLoaded == false){
+    console.log(cookie.load("token"))
     setListLoaded(true)
-    props.fetchTicket("", props.authData.token)
+    props.fetchTicket("", cookie.load("token"))
   }
 
   console.log(props.authData, props.ticketData)
 
   return (
     <div>
-      {props.isAuthenticated?
+      {cookie.load("token")?
         <Card>
           <CardBody style={{padding: "48px 64px 64px 64px"}}>
               {activeTicket >= 0 && props.ticketData.length != 0?
@@ -200,16 +201,16 @@ function MyCase({...props}) {
                         <GridItem sm={1}>
                           <img style={{verticalAlign: 'middle'}} src={statusIcon(ticket.status)}/>
                         </GridItem>
-                        <GridItem sm={3} style={{color: '#1A1A1A', textAlign: 'left', alignSelf: 'center'}}>
+                        <GridItem sm={3} style={{color: '#1A1A1A', textAlign: 'left', alignSelf: 'center', overflow: 'hidden'}}>
                           {ticket.report_code}
                         </GridItem>
-                        <GridItem sm={3} style={{color: '#1A1A1A', textAlign: 'left', alignSelf: 'center'}}>
+                        <GridItem sm={3} style={{color: '#1A1A1A', textAlign: 'left', alignSelf: 'center', overflow: 'hidden'}}>
                           {ticket.information}
                         </GridItem>
-                        <GridItem sm={3} style={{color: '#A5AEC2', textAlign: 'left', alignSelf: 'center'}}>
+                        <GridItem sm={3} style={{color: '#A5AEC2', textAlign: 'left', alignSelf: 'center', overflow: 'hidden'}}>
                           {ticket.detail}
                         </GridItem>
-                        <GridItem sm={2} style={{color: '#A5AEC2', textAlign: 'right', alignSelf: 'center'}}>
+                        <GridItem sm={2} style={{color: '#A5AEC2', textAlign: 'right', alignSelf: 'center', overflow: 'hidden'}}>
                           {moment(ticket.created_date).format("DD MMMM YYYY")}
                         </GridItem>
                       </GridContainer>

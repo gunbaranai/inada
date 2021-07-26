@@ -11,6 +11,7 @@ import 'moment/locale/id';
 import { clearAuth } from "../../redux/actions/aLogin";
 import { connect } from "react-redux";
 import { Close } from '@material-ui/icons';
+import cookie from "react-cookies";
 
 // const steps = [
 //   {label: 'Pengaduan berhasil dibuat', timestamp: '15:39 14 Juni 2021'},
@@ -23,12 +24,13 @@ function Logout({...props}) {
   const handleLogout = () => {
     sessionStorage.clear()
     props.clearAuth()
+    cookie.remove("token")
     props.history.push("/login")
   }
 
   return (
     <div>
-    {props.isAuthenticated?
+    {cookie.load("token")?
       <Dialog open={props.history.location.pathname == "/logout"} onClose={() => props.history.goBack}>
         <DialogTitle style={{textAlign: "right"}}>
           <Close fontSize="large" style={{cursor: "pointer"}} onClick={() => props.history.goBack} />

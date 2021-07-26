@@ -23,6 +23,7 @@ import { ArrowDropDown, Menu } from '@material-ui/icons';
 //import RTLNavbarLinks from "./RTLNavbarLinks.js";
 import Button from "components/CustomButtons/Button.js";
 import { Link } from "react-router-dom";
+import cookie from "react-cookies";
 
 //hooks
 import { useRouteName } from "hooks";
@@ -70,7 +71,7 @@ export default function Header(props) {
   const handleCloseMenu = () => {
     setOpenMenu(null);
   };
-  console.log(routeName)
+  console.log(props.isAuthenticated)
   return (
     <AppBar className={classes.appBar + appBarClasses}>
       <Toolbar className={window.innerWidth >= 960?classes.container:classes.mobileContainer}>
@@ -100,7 +101,7 @@ export default function Header(props) {
           </GridItem>
           <GridItem md={4} style={{textAlign: 'right'}}>
             <div style={{display: 'flex', flexDirection: 'row', float: 'right'}}>
-              {props.isAuthenticated?
+              {cookie.load("token")?
                 <div>
                   <Button
                     style={inactiveButtonStyle}
@@ -225,30 +226,44 @@ export default function Header(props) {
                             </MenuItem>
                           </Link>
                           <Divider light style={{margin: '16px 0px'}} />
-                          <MenuItem
-                            onClick={handleCloseMenu}
-                            className={classes.dropdownItem}
-                            disabled
-                          >
-                            Ubah Profil Pengguna
-                          </MenuItem>
-                          <Link to="/my-case">
+                          {!cookie.load("token")?
+                            <Link to="/login">
+                              <MenuItem
+                                onClick={handleCloseMenu}
+                                className={classes.dropdownItem}
+                              >
+                                Masuk
+                              </MenuItem>
+                            </Link>
+                          :null}
+                          {cookie.load("token")?
+                            <>
                             <MenuItem
                               onClick={handleCloseMenu}
                               className={classes.dropdownItem}
+                              disabled
                             >
-                              Daftar Pengaduan
+                              Ubah Profil Pengguna
                             </MenuItem>
-                          </Link>
-                          <Divider light style={{margin: '16px 0px'}} />
-                          <Link to="/logout">
-                            <MenuItem
-                              onClick={handleCloseMenu}
-                              className={classes.dropdownItem}
-                            >
-                              Keluar
-                            </MenuItem>
-                          </Link>
+                            <Link to="/my-case">
+                              <MenuItem
+                                onClick={handleCloseMenu}
+                                className={classes.dropdownItem}
+                              >
+                                Daftar Pengaduan
+                              </MenuItem>
+                            </Link>
+                            <Divider light style={{margin: '16px 0px'}} />
+                            <Link to="/logout">
+                              <MenuItem
+                                onClick={handleCloseMenu}
+                                className={classes.dropdownItem}
+                              >
+                                Keluar
+                              </MenuItem>
+                            </Link>
+                            </>
+                          :null}
                         </MenuList>
                       </ClickAwayListener>
                     </Paper>

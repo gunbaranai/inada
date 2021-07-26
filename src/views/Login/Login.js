@@ -15,6 +15,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import 'moment/locale/id';
 import { fetchLogin } from "../../redux/actions/aLogin";
 import { connect } from "react-redux";
+import cookie from "react-cookies";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -137,11 +138,11 @@ function Login({...props}) {
     setActiveForm(nextForm)
   }
 
-  console.log(props.isAuthenticated)
+  console.log(cookie.load("token"))
 
   return (
     <div>
-    {props.isAuthenticated?
+    {cookie.load("token")?
       <Redirect from="/" to="/report" />
     :
       <Card>

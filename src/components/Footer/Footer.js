@@ -14,6 +14,7 @@ import styles from "assets/jss/material-dashboard-react/components/footerStyle.j
 // import contact from "assets/img/contact.png"
 import footerXl from "assets/img/footer_xl.png"
 import footerLg from "assets/img/footer_lg.png"
+import footerMd from "assets/img/footer_md.png"
 
 const useStyles = makeStyles(styles);
 
@@ -29,6 +30,9 @@ export default function Footer(props) {
       </Hidden>
       <Hidden only={['xs', 'sm', 'lg', 'xl']}>
         <img style={{maxWidth: '960px', margin: 'auto', marginBottom: '0'}} src={footerLg} />
+      </Hidden>
+      <Hidden only={['md', 'lg', 'xl']}>
+        <img style={{maxWidth: window.innerWidth, margin: 'auto', marginBottom: '0'}} src={footerMd} />
       </Hidden>
     </footer>
   );

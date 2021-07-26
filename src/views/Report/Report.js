@@ -19,6 +19,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import cookie from "react-cookies";
 
 import { Add, Close } from '@material-ui/icons';
 //import moment from 'moment';
@@ -132,22 +133,48 @@ export default function Report() {
       ', files : ', attachments,
     )
 
-    axios({
-      method: "post",
-      url: "http://172.105.119.140:8086/api/report",
-      data: {
-        type: (confidentiality-1).toString(),
-        information: incident,
-        detail: incidentDetail,
-        related_parties: partyName,
-        time_occurrence: incidentTime,
-        location_detail: incidentLocation,
-        is_published: (publish-1).toString(),
-        informer: reporterName,
-        phone_no: reporterNumber,
-        email_address: reporterEmail,
+    const getParams = (auth) => {
+      if(auth){
+        return {
+          method: "post",
+          url: "http://172.105.119.140:8086/api/report",
+          headers: {
+            Authorization: auth
+          },
+          data: {
+            type: (confidentiality-1).toString(),
+            information: incident,
+            detail: incidentDetail,
+            related_parties: partyName,
+            time_occurrence: incidentTime,
+            location_detail: incidentLocation,
+            is_published: (publish-1).toString(),
+            informer: reporterName,
+            phone_no: reporterNumber,
+            email_address: reporterEmail,
+          }
+        }
+      } else {
+        return {
+          method: "post",
+          url: "http://172.105.119.140:8086/api/report",
+          data: {
+            type: (confidentiality-1).toString(),
+            information: incident,
+            detail: incidentDetail,
+            related_parties: partyName,
+            time_occurrence: incidentTime,
+            location_detail: incidentLocation,
+            is_published: (publish-1).toString(),
+            informer: reporterName,
+            phone_no: reporterNumber,
+            email_address: reporterEmail,
+          }
+        }
       }
-    })
+    }
+
+    axios(getParams(cookie.load("token")))
     .then((response) => {
       if(response.status == 200){
         if(response.data.status == "success"){

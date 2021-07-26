@@ -16,6 +16,7 @@ import { connect } from "react-redux";
 import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-react/layouts/headerStyle.js";
+import cookie from "react-cookies"
 
 //import logo from "assets/img/reactlogo.png";
 
@@ -83,7 +84,7 @@ function Header({ ...props }) {
     };
   }, [mainPanel]);
 
-
+console.log(cookie.load("token")?cookie.load("token"):"false")
   return (
     <div className={classes.wrapper}>
       {/*<Sidebar
@@ -100,7 +101,7 @@ function Header({ ...props }) {
         <Navbar
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
-          isAuthenticated={props.isAuthenticated}
+          //isAuthenticated={cookie.load("token") != undefined}
           {...props}
         />
         {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
