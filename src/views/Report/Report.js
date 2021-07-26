@@ -84,7 +84,7 @@ export default function Report() {
   const [saved, save] = React.useState("");
   //const [loaded, loading] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
-  const [formError, setFormError] = React.useState(false);
+  const [formError, setFormError] = React.useState("");
 
   const handleCopyToClipboard = (ticketNumber) => {
     setCopied(true)
@@ -93,11 +93,11 @@ export default function Report() {
 
   const handleSave = () => {
     if(confidentiality-1 < 0 || incident == '' || incidentDetail == '' || publish-1 < 0){
-      setFormError(true)
+      setFormError("Formulir tidak lengkap!")
     } else {
       if(confidentiality-1 == 1){
         if(reporterName == '' || (reporterEmail == '' && reporterNumber == '')){
-          setFormError(true)
+          setFormError("Formulir tidak lengkap!")
         } else {
           handleSend()
         }
@@ -192,26 +192,26 @@ export default function Report() {
                   console.log(uploadResponse.data)
                   save(response.data.data[0].report_code)
                 } else {
-                  setFormError(true) // ganti message
+                  setFormError("Pengunggahan lampiran gagal!") // ganti message
                 }
               } else {
-                setFormError(true) // ganti message
+                setFormError("Pengunggahan lampiran gagal!") // ganti message
               }
             })
             .catch(function(uploadError){
               //loading(false)
               if(uploadError.response){
                 if(uploadError.response.status == 401 || uploadError.response.status == 403 || uploadError.response.status == 400){
-                  setFormError(true) // ganti message nanti
+                  setFormError("Terjadi kesalahan pada pengiriman data!") // ganti message nanti
                 } else if(uploadError.response.status === 404 || uploadError.response.status === 500){
-                  setFormError(true) //"Server cannot be contacted! Please ask your system administrator!: Enum"
+                  setFormError("Server tak dapat dihubungi!") //"Server cannot be contacted! Please ask your system administrator!: Enum"
                 } else {
-                  setFormError(true) //"Something went wrong... Please try again later..."
+                  setFormError("Terjadi kesalahan, periksa koneksi anda dan coba lagi.") //"Something went wrong... Please try again later..."
                 }
               } else if(uploadError.request){
-                setFormError(true) //"Request have no response! Please check on your internet connection and refresh this page."
+                setFormError("Terjadi kesalahan, periksa koneksi anda dan coba lagi.") //"Request have no response! Please check on your internet connection and refresh this page."
               } else {
-                setFormError(true) //"Something went wrong... Please try again later..."
+                setFormError("Terjadi kesalahan, periksa koneksi anda dan coba lagi.") //"Something went wrong... Please try again later..."
               }
             })
           } else {
@@ -219,26 +219,26 @@ export default function Report() {
             save(response.data.data[0].report_code)
           }
         } else {
-          setFormError(true) // ganti message
+          setFormError("Terjadi kesalahan, periksa koneksi anda dan coba lagi.") // ganti message
         }
       } else {
-        setFormError(true) // ganti message
+        setFormError("Terjadi kesalahan, periksa koneksi anda dan coba lagi.") // ganti message
       }
     })
     .catch(function(error){
       //loading(false)
       if(error.response){
         if(error.response.status == 401 || error.response.status == 403 || error.response.status == 400){
-          setFormError(true) // ganti message nanti
+          setFormError("Terjadi kesalahan pada pengiriman data!") // ganti message nanti
         } else if(error.response.status === 404 || error.response.status === 500){
-          setFormError(true) //"Server cannot be contacted! Please ask your system administrator!: Enum"
+          setFormError("Server tak dapat dihubungi!") //"Server cannot be contacted! Please ask your system administrator!: Enum"
         } else {
-          setFormError(true) //"Something went wrong... Please try again later..."
+          setFormError("Terjadi kesalahan, periksa koneksi anda dan coba lagi.") //"Something went wrong... Please try again later..."
         }
       } else if(error.request){
-        setFormError(true) //"Request have no response! Please check on your internet connection and refresh this page."
+        setFormError("Terjadi kesalahan, periksa koneksi anda dan coba lagi.") //"Request have no response! Please check on your internet connection and refresh this page."
       } else {
-        setFormError(true) //"Something went wrong... Please try again later..."
+        setFormError("Terjadi kesalahan, periksa koneksi anda dan coba lagi.") //"Something went wrong... Please try again later..."
       }
     })
   }
@@ -461,12 +461,12 @@ export default function Report() {
           vertical: 'top',
           horizontal: 'center',
         }}
-        open={formError}
+        open={formError != ""}
         autoHideDuration={6000}
-        onClose={() => setFormError(false)}
+        onClose={() => setFormError("")}
       >
-        <Alert onClose={() => setFormError(false)} severity="error">
-          Formulir tidak lengkap!
+        <Alert onClose={() => setFormError("")} severity="error">
+          {formError}
         </Alert>
       </Snackbar>
     </div>
