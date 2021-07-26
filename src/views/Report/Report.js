@@ -71,9 +71,9 @@ const useStyles = makeStyles((styles) => ({
 export default function Report() {
   const classes = useStyles();
   const [confidentiality, setConfidentiality] = React.useState("");
-  const [reporterName, setReporterName] = React.useState("");
-  const [reporterNumber, setReporterNumber] = React.useState("");
-  const [reporterEmail, setReporterEmail] = React.useState("");
+  const [reporterName, setReporterName] = React.useState(cookie.load("name")?cookie.load("name"):"");
+  const [reporterNumber, setReporterNumber] = React.useState(cookie.load("phone")?cookie.load("phone"):"");
+  const [reporterEmail, setReporterEmail] = React.useState(cookie.load("email")?cookie.load("email"):"");
   const [incident, setIncident] = React.useState("");
   const [incidentDetail, setIncidentDetail] = React.useState("");
   const [incidentTime, setIncidentTime] = React.useState("");

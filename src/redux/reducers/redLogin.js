@@ -18,6 +18,9 @@ export function fetchAuth(state = defaultAuthState, action) {
         case RECEIVE_LOGIN:
             newAuthState = action.payload;
             cookie.save("token", action.payload.token, {path: "/"})
+            cookie.save("name", action.payload.user_name, {path: "/"})
+            cookie.save("email", action.payload.email, {path: "/"})
+            cookie.save("phone", action.payload.phone_no, {path: "/"})
             return Object.assign(
                 {},
                 state,
