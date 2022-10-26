@@ -1,12 +1,8 @@
 import { combineReducers } from "redux";
-import { fetchTicket } from './redTicket';
-import { fetchAttachments } from './redAttachments';
-import { fetchAuth } from './redLogin';
+import { fetchJobList } from './redQuery';
 
 const rootReducers = combineReducers({
-  authStore: fetchAuth,
-  ticketStore: fetchTicket,
-  attachmentStore: fetchAttachments,
+  jobsStore: fetchJobList
 });
 
 export default rootReducers;

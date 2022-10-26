@@ -26,25 +26,24 @@ import { Link } from "react-router-dom";
 import cookie from "react-cookies";
 
 //hooks
-import { useRouteName } from "hooks";
+// import { useRouteName } from "hooks";
 
 import styles from "assets/jss/material-dashboard-react/components/headerStyle.js";
-import title from "assets/img/header_title.png"
-import logo from "assets/img/header_logo.png"
+import title from "assets/img/business_job_tobitsuku.png"
 
 const useStyles = makeStyles(styles);
 const inactiveButtonStyle = {
   color: '#fff',
 }
-const activeButtonStyle = {
-  color: '#fff',
-  fontWeight: '700',
-  borderBottom: '5px solid white',
-}
+// const activeButtonStyle = {
+//   color: '#fff',
+//   fontWeight: '700',
+//   borderBottom: '5px solid white',
+// }
 
 export default function Header(props) {
   const classes = useStyles();
-  const routeName = useRouteName();
+  // const routeName = useRouteName();
   const { color } = props;
   const appBarClasses = classNames({
     [" " + classes[color]]: color,
@@ -77,13 +76,15 @@ export default function Header(props) {
       <Toolbar className={window.innerWidth >= 960?classes.container:classes.mobileContainer}>
         {window.innerWidth >= 960?
           <GridContainer style={{display: 'contents'}}>
-          <GridItem md={4} style={{textAlign: 'left'}}>
-            <img src={title} height="64px" />
+          <GridItem md={6} style={{textAlign: 'left'}}>
+            <Link to="/list">
+              <img src={title} height="64px" />
+            </Link>
           </GridItem>
-          <GridItem md={4}>
+          {/*<GridItem md={4}>
             <div className={classes.flex}>
               {/* Here we create navbar brand, based on route name */}
-              <div>
+              {/*<div>
                 <Link to="/report">
                   <Button style={routeName=='Report'?activeButtonStyle:inactiveButtonStyle} color="transparent" className={classes.title}>
                     Ajukan Pengaduan
@@ -98,8 +99,8 @@ export default function Header(props) {
                 </Link>
               </div>
             </div>
-          </GridItem>
-          <GridItem md={4} style={{textAlign: 'right'}}>
+          </GridItem>*/}
+          <GridItem md={6} style={{textAlign: 'right'}}>
             <div style={{display: 'flex', flexDirection: 'row', float: 'right'}}>
               {cookie.load("token")?
                 <div>
@@ -170,11 +171,10 @@ export default function Header(props) {
               :
                 <Link to="/login">
                   <Button style={inactiveButtonStyle} color="transparent" className={classes.title}>
-                    Masuk/Daftar
+                    Login
                   </Button>
                 </Link>
               }
-              <img src={logo} height="64px" />
             </div>
           </GridItem>
           </GridContainer>
@@ -209,7 +209,7 @@ export default function Header(props) {
                     <Paper>
                       <ClickAwayListener onClickAway={handleCloseMenu}>
                         <MenuList role="menu" style={{padding: '24px'}}>
-                          <Link to="/report">
+                          {/*<Link to="/report">
                             <MenuItem
                               onClick={handleCloseMenu}
                               className={classes.dropdownItem}
@@ -225,20 +225,20 @@ export default function Header(props) {
                               Lacak Pengaduan
                             </MenuItem>
                           </Link>
-                          <Divider light style={{margin: '16px 0px'}} />
+                          <Divider light style={{margin: '16px 0px'}} />*/}
                           {!cookie.load("token")?
                             <Link to="/login">
                               <MenuItem
                                 onClick={handleCloseMenu}
                                 className={classes.dropdownItem}
                               >
-                                Masuk
+                                Login
                               </MenuItem>
                             </Link>
                           :null}
                           {cookie.load("token")?
                             <>
-                            <MenuItem
+                            {/*<MenuItem
                               onClick={handleCloseMenu}
                               className={classes.dropdownItem}
                               disabled
@@ -253,13 +253,13 @@ export default function Header(props) {
                                 Daftar Pengaduan
                               </MenuItem>
                             </Link>
-                            <Divider light style={{margin: '16px 0px'}} />
+                            <Divider light style={{margin: '16px 0px'}} />*/}
                             <Link to="/logout">
                               <MenuItem
                                 onClick={handleCloseMenu}
                                 className={classes.dropdownItem}
                               >
-                                Keluar
+                                Logout
                               </MenuItem>
                             </Link>
                             </>

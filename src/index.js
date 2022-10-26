@@ -22,21 +22,16 @@ import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store.js";
 
-// core components
-//import Admin from "layouts/Admin.js";
-//import RTL from "layouts/RTL.js";
 import Header from "layouts/Header.js";
 
 import "assets/css/material-dashboard-react.css?v=1.10.0";
 
 ReactDOM.render(
   <Provider store={store}>
-    <HashRouter>
+    <HashRouter basename={'list'}>
       <Switch>
-        {/*<Route path="/admin" component={Admin} />
-        <Route path="/rtl" component={RTL} />*/}
         <Route path="/" component={Header} />
-        <Redirect from="/" to="/report" />
+        <Redirect from="/" to="/list" />
       </Switch>
     </HashRouter>
   </Provider>,

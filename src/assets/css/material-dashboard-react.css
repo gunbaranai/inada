@@ -62,7 +62,7 @@ html * {
   -moz-osx-font-smoothing: grayscale;
 }
 body {
-  background-image: url('../img/bg.jpg');
+  /* background-image: url('../img/bg.jpg'); */
   background-position-y: center;
   background-size: cover;
 
